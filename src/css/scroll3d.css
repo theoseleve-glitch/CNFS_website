@@ -1,0 +1,381 @@
+/* ==========================================================================
+   CNFS 3D Scroll System
+   Perspective-driven scroll animations with grid deconstruction
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 3D Space Setup
+   -------------------------------------------------------------------------- */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* --------------------------------------------------------------------------
+   2. Scroll-Driven 3D Reveals (JS applies progress via CSS custom property)
+   Elements start transformed, JS sets --scroll-progress 0→1 as they enter
+   -------------------------------------------------------------------------- */
+
+/* Fly in from depth (toward viewer) */
+[data-scroll-3d="fly-in"] {
+  opacity: 0;
+  transform: translateZ(-200px) scale(0.85);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+
+}
+
+[data-scroll-3d="fly-in"].in-view {
+  opacity: 1;
+  transform: translateZ(0) scale(1);
+}
+
+/* Fly in from behind (away from viewer) */
+[data-scroll-3d="fly-back"] {
+  opacity: 0;
+  transform: translateZ(150px) scale(1.1);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+[data-scroll-3d="fly-back"].in-view {
+  opacity: 1;
+  transform: translateZ(0) scale(1);
+}
+
+/* Rotate in from left side */
+[data-scroll-3d="rotate-left"] {
+  opacity: 0;
+  transform: rotateY(25deg) translateX(-60px) translateZ(-80px);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+
+}
+
+[data-scroll-3d="rotate-left"].in-view {
+  opacity: 1;
+  transform: rotateY(0) translateX(0) translateZ(0);
+}
+
+/* Rotate in from right side */
+[data-scroll-3d="rotate-right"] {
+  opacity: 0;
+  transform: rotateY(-25deg) translateX(60px) translateZ(-80px);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+
+}
+
+[data-scroll-3d="rotate-right"].in-view {
+  opacity: 1;
+  transform: rotateY(0) translateX(0) translateZ(0);
+}
+
+/* Tilt up from below */
+[data-scroll-3d="tilt-up"] {
+  opacity: 0;
+  transform: rotateX(15deg) translateY(40px) translateZ(-60px);
+  transform-origin: bottom center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+[data-scroll-3d="tilt-up"].in-view {
+  opacity: 1;
+  transform: rotateX(0) translateY(0) translateZ(0);
+}
+
+/* Flip in */
+[data-scroll-3d="flip"] {
+  opacity: 0;
+  transform: rotateX(-90deg) translateZ(-50px);
+  transform-origin: top center;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+
+}
+
+[data-scroll-3d="flip"].in-view {
+  opacity: 1;
+  transform: rotateX(0) translateZ(0);
+}
+
+/* --------------------------------------------------------------------------
+   3. Deconstructed Grid
+   Cards start scattered in 3D space, assemble into grid on scroll
+   -------------------------------------------------------------------------- */
+.grid-decon {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.grid-decon > * {
+
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s ease;
+}
+
+/* Initial deconstructed states — each child gets a unique scatter */
+.grid-decon:not(.in-view) > *:nth-child(1) {
+  opacity: 0;
+  transform: rotate3d(1, -1, 0, 35deg) translate3d(-40px, 30px, -120px);
+}
+.grid-decon:not(.in-view) > *:nth-child(2) {
+  opacity: 0;
+  transform: rotate3d(-1, 1, 0.5, 28deg) translate3d(50px, -20px, -180px);
+}
+.grid-decon:not(.in-view) > *:nth-child(3) {
+  opacity: 0;
+  transform: rotate3d(0.5, 1, -1, 40deg) translate3d(-30px, -40px, -100px);
+}
+.grid-decon:not(.in-view) > *:nth-child(4) {
+  opacity: 0;
+  transform: rotate3d(-1, -0.5, 1, 32deg) translate3d(60px, 50px, -150px);
+}
+.grid-decon:not(.in-view) > *:nth-child(5) {
+  opacity: 0;
+  transform: rotate3d(1, 0.5, 0, 20deg) translate3d(-50px, 20px, -200px);
+}
+.grid-decon:not(.in-view) > *:nth-child(6) {
+  opacity: 0;
+  transform: rotate3d(-0.5, -1, 0.5, 45deg) translate3d(40px, -30px, -130px);
+}
+
+/* Assembled state */
+.grid-decon.in-view > * {
+  opacity: 1;
+  transform: rotate3d(0, 0, 0, 0deg) translate3d(0, 0, 0);
+}
+
+/* Stagger the assembly */
+.grid-decon.in-view > *:nth-child(1) { transition-delay: 0ms; }
+.grid-decon.in-view > *:nth-child(2) { transition-delay: 80ms; }
+.grid-decon.in-view > *:nth-child(3) { transition-delay: 160ms; }
+.grid-decon.in-view > *:nth-child(4) { transition-delay: 240ms; }
+.grid-decon.in-view > *:nth-child(5) { transition-delay: 320ms; }
+.grid-decon.in-view > *:nth-child(6) { transition-delay: 400ms; }
+
+/* --------------------------------------------------------------------------
+   4. Section Perspective Shift
+   Entire sections tilt slightly based on scroll position
+   -------------------------------------------------------------------------- */
+.section-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero 3D Enhancement
+   -------------------------------------------------------------------------- */
+.hero-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.hero-3d .hero__content {
+  transform: translateZ(60px);
+  will-change: transform;
+}
+
+.hero-3d .hero__badge {
+  transform: translateZ(80px);
+  will-change: transform;
+}
+
+.hero-3d .hero__title {
+  transform: translateZ(40px);
+  will-change: transform;
+}
+
+.hero-3d .hero__actions {
+  transform: translateZ(20px);
+}
+
+/* --------------------------------------------------------------------------
+   6. Stats 3D Counter Pop
+   -------------------------------------------------------------------------- */
+.stats-3d .stats-bar__item {
+  transform-style: preserve-3d;
+
+  opacity: 0;
+  transform: translateZ(-300px) rotateX(20deg);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.stats-3d.in-view .stats-bar__item {
+  opacity: 1;
+  transform: translateZ(0) rotateX(0);
+}
+
+.stats-3d.in-view .stats-bar__item:nth-child(1) { transition-delay: 0ms; }
+.stats-3d.in-view .stats-bar__item:nth-child(2) { transition-delay: 120ms; }
+.stats-3d.in-view .stats-bar__item:nth-child(3) { transition-delay: 240ms; }
+.stats-3d.in-view .stats-bar__item:nth-child(4) { transition-delay: 360ms; }
+
+/* --------------------------------------------------------------------------
+   9. Spec Cards Orbital Entry
+   -------------------------------------------------------------------------- */
+.specs-3d {
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.specs-3d .spec-card {
+
+  opacity: 0;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.specs-3d:not(.in-view) .spec-card:nth-child(1) {
+  transform: rotateY(-30deg) rotateX(10deg) translateZ(-200px);
+}
+.specs-3d:not(.in-view) .spec-card:nth-child(2) {
+  transform: rotateY(15deg) rotateX(-15deg) translateZ(-250px);
+}
+.specs-3d:not(.in-view) .spec-card:nth-child(3) {
+  transform: rotateY(35deg) rotateX(5deg) translateZ(-180px);
+}
+.specs-3d:not(.in-view) .spec-card:nth-child(4) {
+  transform: rotateY(-20deg) rotateX(-10deg) translateZ(-220px);
+}
+.specs-3d:not(.in-view) .spec-card:nth-child(5) {
+  transform: rotateY(10deg) rotateX(20deg) translateZ(-280px);
+}
+.specs-3d:not(.in-view) .spec-card:nth-child(6) {
+  transform: rotateY(-40deg) rotateX(-5deg) translateZ(-160px);
+}
+
+.specs-3d.in-view .spec-card {
+  opacity: 1;
+  transform: rotateY(0) rotateX(0) translateZ(0);
+}
+
+.specs-3d.in-view .spec-card:nth-child(1) { transition-delay: 0ms; }
+.specs-3d.in-view .spec-card:nth-child(2) { transition-delay: 100ms; }
+.specs-3d.in-view .spec-card:nth-child(3) { transition-delay: 200ms; }
+.specs-3d.in-view .spec-card:nth-child(4) { transition-delay: 300ms; }
+.specs-3d.in-view .spec-card:nth-child(5) { transition-delay: 400ms; }
+.specs-3d.in-view .spec-card:nth-child(6) { transition-delay: 500ms; }
+
+/* --------------------------------------------------------------------------
+   10. Timeline 3D Unfold
+   -------------------------------------------------------------------------- */
+.timeline-3d .timeline__item {
+  opacity: 0;
+  transform: rotateX(-30deg) translateZ(-80px);
+  transform-origin: top left;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+.timeline-3d.in-view .timeline__item {
+  opacity: 1;
+  transform: rotateX(0) translateZ(0);
+}
+
+.timeline-3d.in-view .timeline__item:nth-child(1) { transition-delay: 0ms; }
+.timeline-3d.in-view .timeline__item:nth-child(2) { transition-delay: 150ms; }
+.timeline-3d.in-view .timeline__item:nth-child(3) { transition-delay: 300ms; }
+.timeline-3d.in-view .timeline__item:nth-child(4) { transition-delay: 450ms; }
+.timeline-3d.in-view .timeline__item:nth-child(5) { transition-delay: 600ms; }
+
+/* --------------------------------------------------------------------------
+   11. CTA Perspective Tilt
+   -------------------------------------------------------------------------- */
+.cta-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.cta-3d > .container {
+  transform: rotateX(4deg) translateZ(30px);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+}
+
+.cta-3d.in-view > .container {
+  transform: rotateX(0) translateZ(0);
+}
+
+/* --------------------------------------------------------------------------
+   12. Event Cards Cascade
+   -------------------------------------------------------------------------- */
+.events-3d .event-card {
+  opacity: 0;
+  transform: translateX(-30px) rotateY(8deg) translateZ(-100px);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+.events-3d.in-view .event-card {
+  opacity: 1;
+  transform: translateX(0) rotateY(0) translateZ(0);
+}
+
+.events-3d.in-view .event-card:nth-child(1) { transition-delay: 0ms; }
+.events-3d.in-view .event-card:nth-child(2) { transition-delay: 120ms; }
+.events-3d.in-view .event-card:nth-child(3) { transition-delay: 240ms; }
+.events-3d.in-view .event-card:nth-child(4) { transition-delay: 360ms; }
+.events-3d.in-view .event-card:nth-child(5) { transition-delay: 480ms; }
+.events-3d.in-view .event-card:nth-child(6) { transition-delay: 600ms; }
+
+/* --------------------------------------------------------------------------
+   13. Sponsor Slots Materialize
+   -------------------------------------------------------------------------- */
+.sponsors-3d .sponsor-slot {
+  opacity: 0;
+  transform: scale(0.6) rotateY(20deg) translateZ(-100px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+.sponsors-3d.in-view .sponsor-slot {
+  opacity: 1;
+  transform: scale(1) rotateY(0) translateZ(0);
+}
+
+.sponsors-3d.in-view .sponsor-slot:nth-child(1) { transition-delay: 0ms; }
+.sponsors-3d.in-view .sponsor-slot:nth-child(2) { transition-delay: 80ms; }
+.sponsors-3d.in-view .sponsor-slot:nth-child(3) { transition-delay: 160ms; }
+.sponsors-3d.in-view .sponsor-slot:nth-child(4) { transition-delay: 240ms; }
+
+/* --------------------------------------------------------------------------
+   14. Team Org 3D Drop-In
+   -------------------------------------------------------------------------- */
+.org-3d .team-member {
+  opacity: 0;
+  transform: translateY(-40px) translateZ(-150px) rotateX(15deg);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+
+}
+
+.org-3d.in-view .team-member {
+  opacity: 1;
+  transform: translateY(0) translateZ(0) rotateX(0);
+}
+
+.org-3d.in-view .org-chart__level:nth-child(1) .team-member { transition-delay: 0ms; }
+.org-3d.in-view .org-chart__level:nth-child(2) .team-member:nth-child(1) { transition-delay: 200ms; }
+.org-3d.in-view .org-chart__level:nth-child(2) .team-member:nth-child(2) { transition-delay: 300ms; }
+.org-3d.in-view .org-chart__level:nth-child(2) .team-member:nth-child(3) { transition-delay: 400ms; }
+
+/* --------------------------------------------------------------------------
+   15. Reduced Motion Override
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-3d],
+  .grid-decon > *,
+  .grid-decon:not(.in-view) > *,
+  .stats-3d .stats-bar__item,
+  .specs-3d .spec-card,
+  .specs-3d:not(.in-view) .spec-card,
+  .timeline-3d .timeline__item,
+  .events-3d .event-card,
+  .sponsors-3d .sponsor-slot,
+  .org-3d .team-member,
+  .cta-3d > .container,
+  .hero-3d .hero__content,
+  .hero-3d .hero__badge,
+  .hero-3d .hero__title,
+  .hero-3d .hero__actions {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}

@@ -1,0 +1,931 @@
+/* ==========================================================================
+   CNFS — Awwwards-Level Visual Layer
+   Replaces premium.css + scroll3d.css with a unified cinematic system
+   Depends on: style.css (base), GSAP + Lenis (CDN)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Typography Override — Syne + Outfit + Space Mono
+   -------------------------------------------------------------------------- */
+:root {
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-heading: 'Bebas Neue', 'Arial Narrow', sans-serif;
+
+  /* Refined palette */
+  --bg-primary: #0A0C10;
+  --bg-secondary: #0E1118;
+  --bg-elevated: #141720;
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-tertiary: rgba(255, 255, 255, 0.3);
+  --accent: #E8A733;
+  --accent-glow: rgba(232, 167, 51, 0.15);
+  --border: rgba(255, 255, 255, 0.06);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+body * { cursor: none; }
+@media (hover: none) { body, body * { cursor: auto; } }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+/* Space Grotesk for smaller headings (h3–h6) */
+h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+p { color: var(--text-secondary); }
+
+/* --------------------------------------------------------------------------
+   1. Preloader
+   -------------------------------------------------------------------------- */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.preloader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader__logo {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.preloader__bar {
+  width: 120px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 1.5rem;
+  border-radius: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.preloader__fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Grain Overlay
+   -------------------------------------------------------------------------- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Custom Cursor
+   -------------------------------------------------------------------------- */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 12px; height: 12px;
+  background: #FFF;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%) scale(1);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease;
+}
+.cursor--hover { width: 56px; height: 56px; }
+.cursor--text { width: 80px; height: 80px; background: var(--accent); mix-blend-mode: normal; opacity: 0.15; }
+.cursor--click { width: 8px; height: 8px; }
+
+@media (hover: none) { .cursor { display: none !important; } }
+
+/* --------------------------------------------------------------------------
+   4. Smart Navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease;
+}
+
+.site-header--hidden {
+  transform: translateY(-100%);
+}
+
+.site-header--scrolled {
+  background: rgba(10, 12, 16, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Cinematic Hero
+   -------------------------------------------------------------------------- */
+.hero-aw {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 var(--space-xl) var(--space-3xl);
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.hero-aw__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-aw__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  filter: saturate(0.5) contrast(1.3);
+  will-change: transform;
+}
+
+.hero-aw__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(10,12,16,0.3) 0%,
+    rgba(10,12,16,0.6) 40%,
+    rgba(10,12,16,0.95) 100%);
+  z-index: 2;
+}
+
+.hero-aw__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding-top: calc(var(--header-height) + var(--space-3xl));
+}
+
+.hero-aw__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.hero-aw__eyebrow::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-aw__title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 13rem);
+  font-weight: 400; /* Bebas Neue only has 400 */
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2xl);
+}
+
+.hero-aw__title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* GSAP split-text child spans */
+.hero-aw__title .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.hero-aw__title .line {
+  display: block;
+  overflow: hidden;
+}
+
+.hero-aw__title .line-inner {
+  display: block;
+  will-change: transform;
+}
+
+.hero-aw__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.hero-aw__desc {
+  font-size: clamp(0.9375rem, 1.2vw, 1.125rem);
+  color: var(--text-secondary);
+  max-width: 440px;
+  line-height: 1.7;
+}
+
+.hero-aw__scroll {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--text-tertiary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-aw__scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--text-tertiary), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.5; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* --------------------------------------------------------------------------
+   6. Marquee
+   -------------------------------------------------------------------------- */
+.marquee {
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--bg-secondary);
+}
+
+.marquee__track {
+  display: inline-flex;
+  will-change: transform;
+  /* GSAP drives this — no CSS animation */
+}
+
+.marquee__item {
+  font-family: var(--font-display);
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  padding: 0 var(--space-2xl);
+  flex-shrink: 0;
+}
+
+.marquee__item em {
+  font-style: normal;
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   7. Section Intros (label + oversized title)
+   -------------------------------------------------------------------------- */
+.s-intro {
+  margin-bottom: var(--space-3xl);
+}
+
+.s-intro__label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.s-intro__label::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.s-intro__title {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+.s-intro__title::after {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Stats — large viewport-filling numbers
+   -------------------------------------------------------------------------- */
+.stats-aw {
+  padding: var(--space-4xl) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-aw__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stats-aw__item {
+  padding: var(--space-xl) var(--space-lg);
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+
+.stats-aw__item:last-child { border-right: none; }
+
+.stats-aw__number {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.stats-aw__number em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.stats-aw__label {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-tertiary);
+  margin-top: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   9. SIGNATURE MOMENT — Pinned Car Specs Reveal
+   -------------------------------------------------------------------------- */
+.car-pinned {
+  position: relative;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.car-pinned__inner {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.car-pinned__spec {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.car-pinned__value {
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 22vw, 20rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.car-pinned__value em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.car-pinned__name {
+  font-family: var(--font-mono);
+  font-size: clamp(0.625rem, 1vw, 0.8125rem);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-tertiary);
+  margin-top: var(--space-lg);
+}
+
+.car-pinned__progress {
+  position: absolute;
+  bottom: var(--space-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.car-pinned__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.car-pinned__dot.active {
+  background: var(--accent);
+  transform: scale(1.5);
+}
+
+/* --------------------------------------------------------------------------
+   10. Horizontal Scroll Gallery (News)
+   -------------------------------------------------------------------------- */
+.hscroll-section {
+  overflow: hidden;
+}
+
+.hscroll__track {
+  display: flex;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  will-change: transform;
+}
+
+.hscroll__card {
+  flex-shrink: 0;
+  width: clamp(300px, 35vw, 450px);
+}
+
+/* --------------------------------------------------------------------------
+   11. Cards in dark mode
+   -------------------------------------------------------------------------- */
+.section, .section--gray {
+  background: var(--bg-primary);
+}
+
+.section--gray {
+  background: var(--bg-secondary);
+}
+
+.card {
+  background: var(--bg-elevated);
+  border-color: var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  border-color: rgba(232, 167, 51, 0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 40px var(--accent-glow);
+}
+
+.card__title { color: var(--text-primary); }
+.card__text { color: var(--text-secondary); }
+.card__icon {
+  background: var(--accent-glow);
+  border: 1px solid rgba(232, 167, 51, 0.12);
+}
+
+/* Multi-layer shadows on hover */
+.card:hover,
+.news-card:hover,
+.event-card:hover {
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.2),
+    0 4px 8px rgba(0,0,0,0.15),
+    0 16px 32px rgba(0,0,0,0.15),
+    0 0 60px var(--accent-glow);
+}
+
+/* --------------------------------------------------------------------------
+   12. Image Clip-Path Reveal
+   -------------------------------------------------------------------------- */
+.img-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.img-reveal img {
+  will-change: transform;
+}
+
+.img-reveal__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: left;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   13. CTA Glow
+   -------------------------------------------------------------------------- */
+.cta-section {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Magnetic button wrapper */
+.magnetic { display: inline-block; }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--accent);
+  opacity: 0;
+  filter: blur(16px);
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.btn--primary:hover::after {
+  opacity: 0.4;
+}
+
+.btn--outline {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-primary);
+}
+.btn--outline:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+}
+
+.btn--outline-dark {
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text-secondary);
+}
+.btn--outline-dark:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+/* --------------------------------------------------------------------------
+   14. Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(232,167,51,0.3); }
+
+/* --------------------------------------------------------------------------
+   15. Footer dark
+   -------------------------------------------------------------------------- */
+.site-footer { background: #060810; border-top: 1px solid var(--border); }
+.site-footer__link { color: var(--text-tertiary); }
+.site-footer__link:hover { color: var(--accent); }
+.site-footer__heading { color: var(--text-secondary); }
+
+/* --------------------------------------------------------------------------
+   16. Inner Page Overrides
+   -------------------------------------------------------------------------- */
+.page-header { background: var(--bg-primary); border-bottom: 1px solid var(--border); }
+.page-header::before { background: var(--accent-glow); }
+
+.spec-card { background: var(--bg-elevated); border-color: var(--border); }
+.spec-card:hover { border-color: rgba(232,167,51,0.2); box-shadow: 0 0 40px var(--accent-glow); }
+.spec-card__label { color: var(--text-tertiary); }
+
+.news-card { background: var(--bg-elevated); border-color: var(--border); }
+.news-card__excerpt { color: var(--text-secondary); }
+.news-card__meta { color: var(--text-tertiary); }
+
+.event-card { background: var(--bg-elevated); border-color: var(--border); }
+.event-card__text { color: var(--text-secondary); }
+
+.dept-card { background: var(--bg-elevated); border-left-color: var(--accent); }
+.dept-card__text { color: var(--text-secondary); }
+
+.tier-card { background: var(--bg-elevated); border-color: var(--border); }
+.tier-card--featured { border-color: var(--accent); }
+.tier-card__feature { color: var(--text-secondary); border-bottom-color: var(--border); }
+.tier-card__price span { color: var(--text-tertiary); }
+
+.sponsor-slot { border-color: var(--border); }
+.sponsor-slot:hover { border-color: rgba(232,167,51,0.2); box-shadow: 0 0 30px var(--accent-glow); }
+.sponsor-slot__placeholder-text { color: var(--text-tertiary); }
+
+.timeline::before { background: rgba(255,255,255,0.06); }
+.timeline__dot { border-color: var(--bg-primary); }
+.timeline__text { color: var(--text-secondary); }
+
+.cost-table th { color: var(--accent); border-bottom-color: rgba(232,167,51,0.15); }
+.cost-table td { color: var(--text-secondary); border-bottom-color: var(--border); }
+
+.form-group input, .form-group textarea, .form-group select {
+  background: var(--bg-elevated);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-tertiary); }
+.form-group label { color: var(--text-secondary); }
+.contact-info__value { color: var(--text-primary); }
+.contact-info__label { color: var(--text-tertiary); }
+
+.map-placeholder { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-tertiary); }
+
+.team-member__avatar { border-color: rgba(255,255,255,0.08); }
+.team-member__role, .team-member__dept { color: var(--text-tertiary); }
+
+.about-preview__image-accent { background: var(--accent-glow); }
+
+.fs-event { background: var(--bg-elevated); }
+.fs-event:hover { background: rgba(255,255,255,0.04); }
+.fs-event__desc { color: var(--text-secondary); }
+
+/* --------------------------------------------------------------------------
+   17. Responsive — Tablet (1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* Hero */
+  .hero-aw__title {
+    font-size: clamp(3rem, 9vw, 7rem);
+  }
+
+  /* Stats: keep 4-col but tighter */
+  .stats-aw__grid { gap: var(--space-md); }
+  .stats-aw__number { font-size: clamp(2rem, 4vw, 3.5rem); }
+
+  /* Section titles */
+  .s-intro__title { font-size: clamp(2rem, 4.5vw, 3.5rem); }
+
+  /* Pinned specs */
+  .car-pinned__value { font-size: clamp(5rem, 16vw, 12rem); }
+
+  /* Footer: 2 columns */
+  .site-footer__grid { grid-template-columns: 1fr 1fr; gap: var(--space-xl); }
+}
+
+/* --------------------------------------------------------------------------
+   17b. Responsive — Mobile (768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero-aw {
+    align-items: center;
+    padding: 0 var(--space-md) var(--space-xl);
+    min-height: 90vh;
+    min-height: 90dvh;
+  }
+
+  .hero-aw__title {
+    font-size: clamp(2.5rem, 11vw, 5rem);
+    line-height: 0.98;
+  }
+
+  .hero-aw__content {
+    padding-top: calc(var(--header-height) + var(--space-xl));
+  }
+
+  .hero-aw__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+  }
+
+  .hero-aw__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-aw__actions .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero-aw__scroll { display: none; }
+
+  /* Marquee */
+  .marquee__item { font-size: 0.75rem; padding: 0 var(--space-lg); }
+
+  /* Stats: 2 columns */
+  .stats-aw__grid { grid-template-columns: 1fr 1fr; }
+  .stats-aw__item {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-md);
+  }
+  .stats-aw__item:nth-last-child(-n+2) { border-bottom: none; }
+  .stats-aw__number { font-size: clamp(2rem, 8vw, 3rem); }
+
+  /* Section intros */
+  .s-intro__title { font-size: clamp(1.75rem, 7vw, 3rem); }
+  .s-intro__label { font-size: 0.5625rem; }
+
+  /* Pinned car specs */
+  .car-pinned__value { font-size: clamp(3rem, 16vw, 6rem); }
+  .car-pinned__name { font-size: 0.5625rem; letter-spacing: 0.2em; }
+
+  /* Cards: full width on mobile */
+  .grid--3, .grid--2 { grid-template-columns: 1fr; }
+  .about-preview { grid-template-columns: 1fr; gap: var(--space-xl); }
+  .contact-grid { grid-template-columns: 1fr; }
+
+  /* News horizontal scroll: tighter cards */
+  .hscroll__card { width: 85vw; }
+
+  /* Footer: single column */
+  .site-footer__grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+  .site-footer__bottom {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+  }
+
+  /* Nav CTA */
+  .main-nav__cta { margin-left: 0; margin-top: var(--space-md); }
+
+  /* Buttons: touch-friendly sizing */
+  .btn { padding: 1rem 1.5rem; font-size: 0.875rem; min-height: 48px; }
+  .btn--lg { padding: 1rem 2rem; font-size: 1rem; }
+  .btn--sm { padding: 0.75rem 1rem; font-size: 0.8125rem; min-height: 44px; }
+
+  /* Sponsor grid: 2 columns */
+  .sponsor-grid { grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+
+  /* Event cards: stack date above content */
+  .event-card { grid-template-columns: 1fr; gap: var(--space-md); }
+  .event-card__date {
+    flex-direction: row;
+    gap: var(--space-sm);
+    min-height: auto;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  /* Form rows: single column */
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Org chart: tighter */
+  .org-chart { gap: var(--space-lg); }
+  .org-chart__level { gap: var(--space-md); }
+  .team-member--lead .team-member__avatar { width: 80px; height: 80px; font-size: 1.5rem; }
+  .team-member--president .team-member__avatar { width: 100px; height: 100px; font-size: 1.75rem; }
+
+  /* Dept cards */
+  .dept-grid { grid-template-columns: 1fr; }
+
+  /* Tier cards: stack vertically, remove scale */
+  .tier-card--featured { transform: none; }
+
+  /* Cost table */
+  .cost-table { font-size: 0.75rem; }
+  .cost-table th, .cost-table td { padding: var(--space-sm); }
+
+  /* Back to top: smaller, lower-right */
+  .back-to-top { width: 40px; height: 40px; font-size: 1rem; right: var(--space-md); bottom: var(--space-md); }
+}
+
+/* --------------------------------------------------------------------------
+   17c. Responsive — Small mobile (480px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .container { padding: 0 var(--space-md); }
+
+  .hero-aw__title {
+    font-size: clamp(2rem, 12vw, 3.5rem);
+  }
+
+  .hero-aw__eyebrow { font-size: 0.5625rem; }
+
+  .stats-aw__grid { grid-template-columns: 1fr 1fr; }
+  .stats-aw__number { font-size: 2rem; }
+
+  .car-pinned__value { font-size: clamp(2.5rem, 18vw, 4.5rem); }
+
+  .s-intro__title { font-size: clamp(1.5rem, 8vw, 2.5rem); }
+
+  /* Sponsor grid: single column on very small */
+  .sponsor-grid { grid-template-columns: 1fr; }
+
+  /* Team members grid */
+  .team-members-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* FS events grid */
+  .fs-events__grid { grid-template-columns: 1fr; }
+
+  /* Specs grid */
+  .specs-grid { grid-template-columns: 1fr 1fr; }
+
+  /* News horizontal: full viewport width cards */
+  .hscroll__card { width: 90vw; }
+}
+
+/* --------------------------------------------------------------------------
+   17d. Responsive — iPad landscape / large tablet
+   -------------------------------------------------------------------------- */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .hero-aw__title { font-size: clamp(3.5rem, 8vw, 6rem); }
+  .stats-aw__grid { grid-template-columns: repeat(4, 1fr); }
+  .grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .about-preview { grid-template-columns: 1fr 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   17e. Responsive — iPad portrait
+   -------------------------------------------------------------------------- */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .hero-aw__title { font-size: clamp(3rem, 7vw, 5rem); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+  .stats-aw__grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-aw__item { border-right: none; border-bottom: 1px solid var(--border); }
+  .about-preview { grid-template-columns: 1fr; }
+  .hscroll__card { width: 50vw; }
+}
+
+/* --------------------------------------------------------------------------
+   18. Print + Reduced Motion
+   -------------------------------------------------------------------------- */
+@media print {
+  body, .section, .section--gray { background: #fff !important; color: #000 !important; }
+  .grain, .cursor, .preloader, .marquee { display: none !important; }
+  * { transform: none !important; opacity: 1 !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { display: none !important; }
+  body, body * { cursor: auto !important; }
+  .marquee__track { animation: none !important; }
+  .preloader { display: none !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

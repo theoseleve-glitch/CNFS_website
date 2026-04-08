@@ -1,0 +1,20 @@
+# Build output (regenerated with npm run build)
+dist/
+
+# Dependencies
+node_modules/
+
+# Extracted archives (source materials)
+_extracted/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/

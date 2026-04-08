@@ -1,0 +1,879 @@
+/* ==========================================================================
+   CNFS Premium Layer
+   Cinematic dark aesthetic, oversized type, grain, glow, marquee
+   Layers on top of style.css — overrides to dark-first motorsport feel
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Dark Mode Override
+   -------------------------------------------------------------------------- */
+body {
+  background-color: #0A0E1A;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: none;
+}
+
+body * {
+  cursor: none;
+}
+
+/* Reset light-background sections to dark */
+.section,
+.section--gray {
+  background-color: #0A0E1A;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.section--gray {
+  background-color: #0D1226;
+}
+
+.section--dark {
+  background-color: #060914;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #FFFFFF;
+}
+
+.section-label {
+  color: var(--color-secondary);
+}
+
+.lead {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.section-title::after {
+  background: var(--color-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   2. Grain Texture Overlay
+   -------------------------------------------------------------------------- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Custom Cursor
+   -------------------------------------------------------------------------- */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor--hover {
+  width: 60px;
+  height: 60px;
+}
+
+.cursor--click {
+  width: 10px;
+  height: 10px;
+}
+
+/* Hide on touch devices */
+@media (hover: none) {
+  .cursor { display: none; }
+  body, body * { cursor: auto; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Oversized Cinematic Typography
+   -------------------------------------------------------------------------- */
+.hero-cinema__title {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 12vw, 11rem);
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin-bottom: var(--space-lg);
+}
+
+.hero-cinema__title .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.05em;
+}
+
+.hero-cinema__title .word-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-cinema__title.revealed .word-inner {
+  transform: translateY(0);
+}
+
+/* Stagger each word */
+.hero-cinema__title .word:nth-child(1) .word-inner { transition-delay: 0.1s; }
+.hero-cinema__title .word:nth-child(2) .word-inner { transition-delay: 0.2s; }
+.hero-cinema__title .word:nth-child(3) .word-inner { transition-delay: 0.3s; }
+.hero-cinema__title .word:nth-child(4) .word-inner { transition-delay: 0.4s; }
+.hero-cinema__title .word:nth-child(5) .word-inner { transition-delay: 0.5s; }
+
+.hero-cinema__title em {
+  font-style: normal;
+  color: var(--color-secondary);
+  display: inline-block;
+}
+
+/* Subtitle line-by-line reveal */
+.reveal-line {
+  overflow: hidden;
+}
+
+.reveal-line span {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.5s ease;
+}
+
+.reveal-line.revealed span {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Section heading reveal */
+.heading-reveal {
+  overflow: hidden;
+}
+
+.heading-reveal .line {
+  display: block;
+  overflow: hidden;
+}
+
+.heading-reveal .line-inner {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heading-reveal.revealed .line-inner {
+  transform: translateY(0);
+}
+
+.heading-reveal.revealed .line:nth-child(2) .line-inner { transition-delay: 0.1s; }
+.heading-reveal.revealed .line:nth-child(3) .line-inner { transition-delay: 0.2s; }
+
+/* --------------------------------------------------------------------------
+   5. Marquee / Ticker Strip
+   -------------------------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: var(--space-lg) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0D1226;
+}
+
+.marquee__track {
+  display: inline-flex;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.marquee__text {
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.15);
+  padding: 0 var(--space-2xl);
+  flex-shrink: 0;
+}
+
+.marquee__text em {
+  font-style: normal;
+  color: var(--color-secondary);
+  opacity: 0.5;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* --------------------------------------------------------------------------
+   6. Premium Card Overrides
+   -------------------------------------------------------------------------- */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.card:hover {
+  border-color: rgba(232, 167, 51, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 40px rgba(232, 167, 51, 0.08);
+}
+
+.card__title {
+  color: #FFFFFF;
+}
+
+.card__text {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.card__icon {
+  background: rgba(232, 167, 51, 0.08);
+  border: 1px solid rgba(232, 167, 51, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   7. Premium Button Overrides
+   -------------------------------------------------------------------------- */
+.btn--primary {
+  background: var(--color-secondary);
+  color: #0A0E1A;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn--primary::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: var(--color-secondary);
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.btn--primary:hover::before {
+  opacity: 0.5;
+}
+
+.btn--outline {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+}
+
+.btn--outline:hover {
+  background: #FFFFFF;
+  color: #0A0E1A;
+  border-color: #FFFFFF;
+}
+
+.btn--outline-dark {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.btn--outline-dark:hover {
+  background: #FFFFFF;
+  color: #0A0E1A;
+  border-color: #FFFFFF;
+}
+
+/* Magnetic wrapper */
+.magnetic {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   8. Premium Hero
+   -------------------------------------------------------------------------- */
+.hero-cinema {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: var(--space-4xl);
+  background: #0A0E1A;
+  overflow: hidden;
+}
+
+.hero-cinema__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-cinema__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 14, 26, 0.4) 0%,
+    rgba(10, 14, 26, 0.7) 50%,
+    rgba(10, 14, 26, 0.95) 100%
+  );
+  z-index: 2;
+}
+
+.hero-cinema__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.5;
+  filter: saturate(0.6) contrast(1.2);
+}
+
+.hero-cinema__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding-top: var(--header-height);
+}
+
+.hero-cinema__sub {
+  font-family: var(--font-heading);
+  font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-xl);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease 0.8s, transform 0.6s ease 0.8s;
+}
+
+.hero-cinema__sub.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-cinema__desc {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: var(--space-2xl);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease 1s, transform 0.6s ease 1s;
+}
+
+.hero-cinema__desc.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-cinema__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s;
+}
+
+.hero-cinema__actions.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   9. Horizontal Scroll Section
+   -------------------------------------------------------------------------- */
+.hscroll {
+  position: relative;
+  overflow: hidden;
+}
+
+.hscroll__track {
+  display: flex;
+  gap: var(--space-xl);
+  padding: var(--space-3xl) var(--space-xl);
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+.hscroll__item {
+  flex-shrink: 0;
+  width: clamp(280px, 30vw, 400px);
+}
+
+/* --------------------------------------------------------------------------
+   10. Stats Premium
+   -------------------------------------------------------------------------- */
+.stats-cinema {
+  padding: var(--space-4xl) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stats-cinema__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xl);
+}
+
+.stats-cinema__item {
+  text-align: center;
+  padding: var(--space-xl);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stats-cinema__item:last-child {
+  border-right: none;
+}
+
+.stats-cinema__number {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-xs);
+}
+
+.stats-cinema__number em {
+  font-style: normal;
+  color: var(--color-secondary);
+}
+
+.stats-cinema__label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   11. Premium Section Headers
+   -------------------------------------------------------------------------- */
+.section-intro {
+  margin-bottom: var(--space-3xl);
+}
+
+.section-intro__label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.section-intro__label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--color-secondary);
+}
+
+.section-intro__title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-lg);
+}
+
+.section-intro__title::after {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   12. Premium Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background: #060914;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.site-footer__link {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.site-footer__link:hover {
+  color: var(--color-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   13. Premium Header (glassmorphism)
+   -------------------------------------------------------------------------- */
+.site-header--scrolled {
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   14. Spec Cards Premium
+   -------------------------------------------------------------------------- */
+.spec-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.spec-card:hover {
+  border-color: rgba(232, 167, 51, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 30px rgba(232, 167, 51, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   15. CTA Premium
+   -------------------------------------------------------------------------- */
+.cta-section {
+  background: linear-gradient(135deg, #0D1226 0%, #0A0E1A 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   16. Event Cards Premium
+   -------------------------------------------------------------------------- */
+.event-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.event-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 167, 51, 0.15);
+}
+
+.event-card__text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   17. Sponsor Slots Premium
+   -------------------------------------------------------------------------- */
+.sponsor-slot {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.sponsor-slot:hover {
+  border-color: rgba(232, 167, 51, 0.3);
+  background: rgba(232, 167, 51, 0.03);
+  box-shadow: 0 0 30px rgba(232, 167, 51, 0.05);
+}
+
+.sponsor-slot__placeholder-text {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   18. Dept / Team Cards Premium
+   -------------------------------------------------------------------------- */
+.dept-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-left-color: var(--color-secondary);
+  box-shadow: none;
+}
+
+.dept-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dept-card__text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.team-member__avatar {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.team-member__role,
+.team-member__dept {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   19. News Cards Premium
+   -------------------------------------------------------------------------- */
+.news-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.news-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 167, 51, 0.15);
+}
+
+.news-card__excerpt {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.news-card__meta {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   20. Form Premium
+   -------------------------------------------------------------------------- */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(232, 167, 51, 0.1);
+}
+
+.form-group label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-info__value {
+  color: #FFFFFF;
+}
+
+.contact-info__label {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   21. Page Header Premium
+   -------------------------------------------------------------------------- */
+.page-header {
+  background: #0A0E1A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.page-header::before {
+  background: rgba(232, 167, 51, 0.03);
+}
+
+/* --------------------------------------------------------------------------
+   22. Tier Cards Premium
+   -------------------------------------------------------------------------- */
+.tier-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tier-card:hover {
+  border-color: rgba(232, 167, 51, 0.25);
+  box-shadow: 0 8px 40px rgba(232, 167, 51, 0.06);
+}
+
+.tier-card--featured {
+  border-color: var(--color-secondary);
+}
+
+.tier-card__price span {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tier-card__feature {
+  color: rgba(255, 255, 255, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   23. Timeline Premium
+   -------------------------------------------------------------------------- */
+.timeline::before {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.timeline__dot {
+  border-color: #0A0E1A;
+}
+
+.timeline__title {
+  color: #FFFFFF;
+}
+
+.timeline__text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   24. Cost Table Premium
+   -------------------------------------------------------------------------- */
+.cost-table th {
+  color: var(--color-secondary);
+  border-bottom-color: rgba(232, 167, 51, 0.2);
+}
+
+.cost-table td {
+  color: rgba(255, 255, 255, 0.7);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.cost-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* --------------------------------------------------------------------------
+   25. FS Event Items Premium
+   -------------------------------------------------------------------------- */
+.fs-event {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--border-radius-lg);
+}
+
+.fs-event:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.fs-event__desc {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   26. Map Placeholder Premium
+   -------------------------------------------------------------------------- */
+.map-placeholder {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   27. About Preview Accent
+   -------------------------------------------------------------------------- */
+.about-preview__image-accent {
+  background: rgba(232, 167, 51, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   28. Back to Top Premium
+   -------------------------------------------------------------------------- */
+.back-to-top {
+  background: rgba(232, 167, 51, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+/* --------------------------------------------------------------------------
+   29. Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0E1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 167, 51, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   30. Responsive Overrides
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .stats-cinema__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats-cinema__item {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .stats-cinema__item:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .hero-cinema {
+    align-items: center;
+    padding-bottom: var(--space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   31. Print: undo dark mode
+   -------------------------------------------------------------------------- */
+@media print {
+  body,
+  .section,
+  .section--gray,
+  .section--dark {
+    background: white !important;
+    color: #000 !important;
+  }
+  body::after {
+    display: none !important;
+  }
+  .cursor {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   32. Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+  .hero-cinema__title .word-inner,
+  .reveal-line span,
+  .heading-reveal .line-inner,
+  .hero-cinema__sub,
+  .hero-cinema__desc,
+  .hero-cinema__actions {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  .cursor {
+    display: none;
+  }
+  body, body * {
+    cursor: auto;
+  }
+}
