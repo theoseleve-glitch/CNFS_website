@@ -7,8 +7,17 @@
     "start": "npx serve src -l 3000 -s",
     "build": "node scripts/build.js",
     "lint:css": "npx stylelint src/css/**/*.css --fix",
-    "lint:html": "npx htmlhint src/*.html"
+    "lint:html": "npx htmlhint src/*.html",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
-  "keywords": ["formula-student", "cnfs", "centrale-nantes"],
-  "license": "MIT"
+  "keywords": [
+    "formula-student",
+    "cnfs",
+    "centrale-nantes"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.81.0"
+  }
 }
