@@ -79,7 +79,11 @@
             <p>Whether you're interested in partnering with us, joining the team, or just want to learn more - we'd love to hear from you.</p>
 
             <!-- wp:contact-form-7 or wp:wpforms placeholder -->
-            <form class="contact-form" action="#" method="POST">
+            <form class="contact-form" action="https://formsubmit.co/contact@cnfs.racing" method="POST">
+              <input type="hidden" name="_subject" value="New message from cnfs.racing">
+              <input type="hidden" name="_next" value="https://cnfs.racing/contact.html?sent=true">
+              <input type="hidden" name="_captcha" value="true">
+              <input type="text" name="_honey" style="display:none" tabindex="-1">
               <div class="form-row">
                 <div class="form-group">
                   <label for="first-name">First Name *</label>

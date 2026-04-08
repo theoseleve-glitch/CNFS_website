@@ -141,22 +141,20 @@
   });
 
   /* -----------------------------------------------------------------------
-     7. Contact form (front-end only, WP will replace with plugin)
+     7. Contact form — submitted via Formsubmit.co to contact@cnfs.racing
+     Show success message if redirected back with ?sent=true
      ----------------------------------------------------------------------- */
-  const contactForm = document.querySelector('.contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const btn = this.querySelector('button[type="submit"]');
-      const originalText = btn.textContent;
-      btn.textContent = 'Sent!';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = originalText;
-        btn.disabled = false;
-        this.reset();
-      }, 2500);
-    });
+  if (window.location.search.includes('sent=true')) {
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+      contactForm.style.display = 'none';
+      const msg = document.createElement('div');
+      msg.style.cssText = 'text-align:center;padding:var(--space-3xl) 0;';
+      msg.textContent = 'Message sent! We will get back to you soon.';
+      msg.style.fontSize = '1.25rem';
+      msg.style.color = 'var(--accent, #E8A733)';
+      contactForm.parentNode.insertBefore(msg, contactForm);
+    }
   }
 
   /* -----------------------------------------------------------------------
