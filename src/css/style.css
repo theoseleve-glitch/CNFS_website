@@ -370,8 +370,10 @@ p {
 }
 
 .site-header__logo img {
-  height: 45px;
+  height: 48px;
   width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .site-header__logo-text {
@@ -2086,11 +2088,20 @@ p {
   text-align: right;
 }
 
-/* Logo image in header (removes inline style) */
+/* Logo image in header — transparent PNG, no rounded corners */
 .site-header__logo img {
-  height: 45px;
+  height: 48px;
   width: auto;
-  border-radius: 4px;
+  object-fit: contain;
+  display: block;
+}
+
+/* News card image — real photos now, drop the gradient placeholder when img is loaded */
+.news-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* News card image placeholder — WP will replace with real featured images */
