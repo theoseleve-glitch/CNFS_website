@@ -1,0 +1,25 @@
+{
+  "defaults": {
+    "colors": {
+      "primary": "#1B2141",
+      "primaryLight": "#2A3260",
+      "secondary": "#E8A733",
+      "secondaryLight": "#F0BE5C",
+      "accent": "#2D5BA9",
+      "accentLight": "#4A7FD4",
+      "text": "#2C3045",
+      "dark": "#0D1226"
+    },
+    "fonts": {
+      "heading": "'Bebas Neue', 'Arial Narrow', sans-serif",
+      "body": "'Space Grotesk', 'Helvetica Neue', sans-serif"
+    },
+    "scale": {
+      "radius": "8px",
+      "radiusLg": "16px",
+      "containerMax": "1200px",
+      "headerHeight": "80px"
+    }
+  },
+  "overrides": {}
+}
