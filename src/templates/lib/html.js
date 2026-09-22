@@ -8,6 +8,11 @@ export function esc(value) {
   return String(value).replace(/[&<>"']/g, (c) => TEXT[c]);
 }
 
+// Escapes a value for use inside a DOUBLE-QUOTED HTML attribute. This function
+// is safe ONLY when the value is placed inside double quotes (e.g. attr="value").
+// It does NOT defend against injection if the attribute is unquoted or single-quoted.
+// Template authors should prefer the attr() function instead, which guarantees the
+// quoting and prevents hand-built attribute mistakes.
 export function attrEsc(value) {
   return esc(value);
 }
@@ -17,8 +22,12 @@ export function attr(name, value) {
   return ` ${name}="${attrEsc(value)}"`;
 }
 
-// For content that is already valid HTML — entity literals carried over from
-// the original markup, and rich-text fields sanitised server-side in Phase 3.
+// WARNING: raw() performs NO escaping. The argument is emitted into the page
+// verbatim exactly as provided. Use raw() ONLY for markup already known to be safe:
+// literal HTML entities carried over from the original source markup (&copy;, &#9737;,
+// &bull;), and in later phases, rich-text that has already been sanitised server-side
+// against a tag whitelist. Never pass unsanitised user input or CMS-authored content
+// to raw() — doing so creates an injection vulnerability.
 export function raw(value) {
   if (value === null || value === undefined) return '';
   return String(value);
