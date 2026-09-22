@@ -33,3 +33,36 @@ test('escapes values so a token cannot terminate the style element', () => {
   assert.ok(!out.includes('<script>'));
   assert.ok(!out.includes('</style><script>'));
 });
+
+test('drops a color value that would close the :root rule early and inject sibling CSS', () => {
+  const out = renderThemeVars({ overrides: { colors: { primary: 'red;}body{display:none}' } } });
+  assert.equal(out, '');
+  assert.ok(!out.includes('display:none'));
+  assert.ok(!out.includes('body{'));
+});
+
+test('drops a color value using url()', () => {
+  const out = renderThemeVars({ overrides: { colors: { primary: 'url(https://evil.example/x)' } } });
+  assert.equal(out, '');
+  assert.ok(!out.includes('url('));
+});
+
+test('renders valid values for each token group', () => {
+  const out = renderThemeVars({
+    overrides: {
+      colors: { primary: '#FF0000' },
+      fonts: { heading: "'Bebas Neue', 'Arial Narrow', sans-serif" },
+      scale: { radius: '12px' }
+    }
+  });
+  assert.ok(out.includes('--color-primary:#FF0000'));
+  assert.ok(out.includes('--font-heading:&#39;Bebas Neue&#39;, &#39;Arial Narrow&#39;, sans-serif'));
+  assert.ok(out.includes('--border-radius:12px'));
+});
+
+test('emits only the valid declaration when one override in a mix is invalid', () => {
+  const out = renderThemeVars({
+    overrides: { colors: { primary: '#FF0000', secondary: 'red;}body{display:none}' } }
+  });
+  assert.equal(out, '<style id="cnfs-theme">:root{--color-primary:#FF0000}</style>');
+});
