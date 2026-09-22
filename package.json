@@ -2,10 +2,12 @@
   "name": "cnfs-website",
   "version": "1.0.0",
   "description": "Centrale Nantes Formula Student - Mockup Website",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "npx serve src -l 3000 -s",
     "build": "node scripts/build.js",
+    "test": "node --test tests/",
     "lint:css": "npx stylelint src/css/**/*.css --fix",
     "lint:html": "npx htmlhint src/*.html"
   },
