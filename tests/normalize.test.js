@@ -31,3 +31,16 @@ test('treats differing indentation as equal', () => {
     normalizeHtml('<ul><li>a</li></ul>')
   );
 });
+
+test('KNOWN LIMITATION: inter-tag whitespace is deleted, not collapsed', () => {
+  // This pins deliberate behaviour: inter-tag whitespace is deleted entirely,
+  // making us blind to spacing between adjacent inline elements. Safe only under
+  // the precondition that every such container on this site (.social-links,
+  // .main-nav__list, .btn-group, .page-header__breadcrumb, .marquee__track) is
+  // flex/inline-flex with explicit gap, so whitespace-only nodes generate no boxes.
+  // If a future non-flex inline run appears, this test must fail loudly.
+  assert.equal(
+    normalizeHtml('<span>a</span> <span>b</span>'),
+    normalizeHtml('<span>a</span><span>b</span>')
+  );
+});
