@@ -1,0 +1,64 @@
+{
+  "brand": {
+    "name": "CNFS",
+    "tagline": "Formula Student",
+    "logo": "assets/images/logo-cnfs.png"
+  },
+  "nav": [
+    { "label": "Home", "href": "index.html" },
+    { "label": "About", "href": "about.html" },
+    { "label": "Formula Student", "href": "formula-student.html" },
+    { "label": "The Project", "href": "project.html" },
+    { "label": "Partners", "href": "partners.html" },
+    { "label": "Contact", "href": "contact.html" }
+  ],
+  "navCta": {
+    "label": "Become a Partner",
+    "href": "partners.html"
+  },
+  "footer": {
+    "brandDesc": "Centrale Nantes Formula Student - Préparer l'avenir, one student at a time.",
+    "columns": [
+      {
+        "heading": "Navigation",
+        "links": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "About Us", "href": "about.html" },
+          { "label": "Formula Student", "href": "formula-student.html" },
+          { "label": "The Project", "href": "project.html" }
+        ]
+      },
+      {
+        "heading": "Get Involved",
+        "links": [
+          { "label": "Become a Partner", "href": "partners.html" },
+          { "label": "Contact Us", "href": "contact.html" }
+        ]
+      },
+      {
+        "heading": "Contact",
+        "links": [
+          { "label": "Centrale Nantes" },
+          { "label": "1 Rue de la Noe" },
+          { "label": "44300 Nantes, France" },
+          { "label": "contact@cnfs.racing", "href": "mailto:contact@cnfs.racing" }
+        ]
+      }
+    ],
+    "bottom": {
+      "copyright": "&copy; 2026 Centrale Nantes Formula Student. All rights reserved.",
+      "credit": "A student project at <a href=\"https://www.ec-nantes.fr\" class=\"site-footer__link\" target=\"_blank\" rel=\"noopener\">Centrale Nantes</a>"
+    }
+  },
+  "contact": {
+    "email": "contact@cnfs.racing",
+    "phone": "+33783990278",
+    "address": "1 Rue de la Noe, 44300 Nantes"
+  },
+  "social": [
+    { "platform": "Instagram", "href": "https://www.instagram.com/cnfsracingteam/", "glyph": "&#9737;" },
+    { "platform": "LinkedIn", "href": "https://www.linkedin.com/company/centralenantesfs/", "glyph": "in" },
+    { "platform": "Facebook", "glyph": "f" },
+    { "platform": "YouTube", "glyph": "&#9654;" }
+  ]
+}
