@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { esc, attrEsc, attr, raw, cls, each } from '../src/templates/lib/html.js';
 
-test('esc escapes the five HTML-significant characters', () => {
-  assert.equal(esc('<a> & "b" \'c\''), '&lt;a&gt; &amp; &quot;b&quot; &#39;c&#39;');
+test('esc escapes only the three text-context-significant characters', () => {
+  assert.equal(esc('<a> & "b" \'c\''), '&lt;a&gt; &amp; "b" \'c\'');
 });
 
 test('esc returns empty string for null and undefined', () => {
@@ -12,11 +12,25 @@ test('esc returns empty string for null and undefined', () => {
 });
 
 test('esc leaves accented characters alone', () => {
-  assert.equal(esc("Préparer l'avenir"), 'Préparer l&#39;avenir');
+  assert.equal(esc("Préparer l'avenir"), "Préparer l'avenir");
+});
+
+test('esc leaves a literal double quote and apostrophe untouched in text', () => {
+  assert.equal(esc(`She said "hi" and it's fine`), `She said "hi" and it's fine`);
 });
 
 test('attrEsc prevents breaking out of a double-quoted attribute', () => {
   assert.equal(attrEsc('x" onerror="alert(1)'), 'x&quot; onerror=&quot;alert(1)');
+});
+
+test('attrEsc escapes " but leaves \' untouched', () => {
+  assert.equal(attrEsc(`a"b'c`), 'a&quot;b\'c');
+});
+
+test('PARITY: text escaping must not introduce entities the source does not have', () => {
+  const html = esc(`France's "best" team`);
+  assert.ok(!html.includes('&#39;'));
+  assert.ok(!html.includes('&quot;'));
 });
 
 test('attr omits the attribute entirely when the value is absent', () => {

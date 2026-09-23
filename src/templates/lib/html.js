@@ -1,20 +1,30 @@
 // HTML string primitives. No Node built-ins: this module is imported by the
 // Cloudflare Workers runtime in Phase 2.
 
-const TEXT = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+// esc() is the TEXT-CONTENT escaper: for a value placed between tags (e.g.
+// <p>${esc(value)}</p>). Only '&', '<' and '>' are special there — they could
+// start an entity or open/close a tag. Quotes have no special meaning in text
+// content, so escaping them is gratuitous: it breaks byte parity with source
+// markup that contains literal ' or " in prose without adding any safety.
+const TEXT = { '&': '&amp;', '<': '&lt;', '>': '&gt;' };
 
 export function esc(value) {
   if (value === null || value === undefined) return '';
-  return String(value).replace(/[&<>"']/g, (c) => TEXT[c]);
+  return String(value).replace(/[&<>]/g, (c) => TEXT[c]);
 }
 
-// Escapes a value for use inside a DOUBLE-QUOTED HTML attribute. This function
-// is safe ONLY when the value is placed inside double quotes (e.g. attr="value").
-// It does NOT defend against injection if the attribute is unquoted or single-quoted.
-// Template authors should prefer the attr() function instead, which guarantees the
-// quoting and prevents hand-built attribute mistakes.
+// attrEsc() is the DOUBLE-QUOTED-ATTRIBUTE escaper: for a value placed inside
+// double quotes (e.g. attr="${attrEsc(value)}"). Here '"' is also special,
+// because an unescaped one would close the attribute early — but "'" is not,
+// since a single quote inside a double-quoted attribute is just a character.
+// This function is safe ONLY when the attribute is double-quoted; nothing may
+// ever hand-build a single-quoted attribute with it. Template authors should
+// prefer attr(), which guarantees double-quoting and prevents that mistake.
+const ATTR = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+
 export function attrEsc(value) {
-  return esc(value);
+  if (value === null || value === undefined) return '';
+  return String(value).replace(/[&<>"]/g, (c) => ATTR[c]);
 }
 
 export function attr(name, value) {

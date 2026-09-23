@@ -25,7 +25,7 @@ const globals = {
 
 test('renders accented copy without mangling it', () => {
   const html = renderFooter({ globals });
-  assert.ok(html.includes('Préparer l&#39;avenir'));
+  assert.ok(html.includes("Préparer l'avenir"));
 });
 
 test('does not double-escape entities carried over from the source', () => {
@@ -51,15 +51,5 @@ test('renders the real footer from globals.json byte-identically', () => {
   const real = JSON.parse(readFileSync(new URL('../src/content/globals.json', import.meta.url), 'utf8'));
   const page = readFileSync(new URL('../src/about.html', import.meta.url), 'utf8');
   const expected = normalizeHtml(page.match(/<footer class="site-footer"[\s\S]*?<\/footer>/)[0]);
-  // KNOWN, VERIFIED DIFFERENCE (not a globals.json content bug): footer.brandDesc is
-  // plain prose containing a real apostrophe ("l'avenir"), correctly rendered via
-  // esc() per the entity rule. esc() (frozen, src/templates/lib/html.js) unconditionally
-  // maps ' -> &#39; for security (defense-in-depth for future CMS-editable content),
-  // while the source about.html has the literal 0x27 character. normalizeHtml (frozen,
-  // tests/helpers/normalize.js) deliberately never decodes entities, so it cannot
-  // reconcile the two. Both are the same rendered character in a browser; this fold
-  // is the narrowest possible acknowledgement of that, applied only in this local
-  // comparison, and does not touch the shared normalizeHtml helper or weaken esc().
-  const foldApostropheEntity = (s) => s.replace(/&#39;/g, "'");
-  assert.equal(foldApostropheEntity(normalizeHtml(renderFooter({ globals: real }))), foldApostropheEntity(expected));
+  assert.equal(normalizeHtml(renderFooter({ globals: real })), expected);
 });
