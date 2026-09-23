@@ -1,0 +1,145 @@
+{
+  "path": "about.html",
+  "title": "About Us - CNFS",
+  "meta": {
+    "description": "Learn about Centrale Nantes Formula Student - our team, mission, departments, and the people behind the car.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "About Us - CNFS",
+    "ogDescription": "Learn about Centrale Nantes Formula Student - our team, mission, and departments.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "About Us" }
+        ],
+        "title": "About Us"
+      }
+    },
+    {
+      "type": "about-preview",
+      "props": {
+        "eyebrow": "Our Story",
+        "title": "Born to Engineer, Built to Race",
+        "body": [
+          "<strong>Centrale Nantes Formula Student</strong> is a student-led association at Centrale Nantes, one of France's top engineering schools.",
+          "Founded with the ambition to bring Centrale Nantes to the forefront of Formula Student competition, our team brings together 20 students from all engineering disciplines. United by a shared passion for motorsport and innovation, we design, manufacture, and test a competition race car from scratch every year.",
+          "Our mission goes beyond building a fast car. We develop the next generation of engineers through hands-on experience with real-world challenges in design, manufacturing, project management, and business development."
+        ],
+        "image": "assets/images/event-formula-student-france.jpg",
+        "imageAlt": "CNFS team working on the car",
+        "accent": true
+      }
+    },
+    {
+      "type": "labeled-card-grid",
+      "props": {
+        "eyebrow": "Our Mission",
+        "title": "What Drives Us",
+        "background": "gray",
+        "cards": [
+          {
+            "icon": "&#128640;",
+            "title": "Innovation",
+            "text": "Push the boundaries of student engineering. We explore creative solutions and apply cutting-edge technology to every aspect of our car."
+          },
+          {
+            "icon": "&#127891;",
+            "title": "Education",
+            "text": "Bridge the gap between academic theory and real-world application. Every team member gains hands-on experience that shapes their engineering career."
+          },
+          {
+            "icon": "&#129309;",
+            "title": "Teamwork",
+            "text": "Learn to collaborate across disciplines. Mechanical, electrical, software, and business students work together toward a single goal."
+          }
+        ]
+      }
+    },
+    {
+      "type": "dept-grid",
+      "props": {
+        "eyebrow": "Our Structure",
+        "title": "4 Specialized Departments",
+        "intro": "Each department plays a critical role in turning our design into a competitive race car.",
+        "depts": [
+          { "name": "Conception", "text": "Chassis design, suspension geometry, powertrain integration, and all mechanical systems. From CAD to manufacturing — every physical component of the car." },
+          { "name": "Electronics", "text": "High-voltage battery management, motor controllers, sensor integration, data acquisition, and cockpit instrumentation for our electric powertrain." },
+          { "name": "Programmation", "text": "Vehicle control software, telemetry systems, ECU programming, and simulation tools. The code that makes Falcon drive." },
+          { "name": "Enterprise", "text": "Sponsorship acquisition, brand management, business presentations, event planning, and partnership relations. The commercial engine of CNFS." }
+        ]
+      }
+    },
+    {
+      "type": "labeled-specs-grid",
+      "props": {
+        "eyebrow": "Centrale Nantes",
+        "title": "Our University",
+        "intro": "Centrale Nantes is one of France's leading engineering schools (Grande Ecole), renowned for excellence in mechanical engineering, energy, and naval engineering. Located in Nantes, a vibrant city in western France, our university provides the facilities, expertise, and support that makes CNFS possible.",
+        "background": "dark",
+        "specs": [
+          { "value": "Top 10", "label": "Engineering School in France" },
+          { "value": "1919", "label": "Year Founded" },
+          { "value": "2,500+", "label": "Students" }
+        ]
+      }
+    },
+    {
+      "type": "org-chart",
+      "props": {
+        "id": "team",
+        "eyebrow": "Meet the Team",
+        "title": "The People Behind the Car",
+        "intro": "20 students organized across 4 specialized departments, led by a dedicated executive team.",
+        "levels": [
+          [
+            { "avatar": "TS", "name": "Théo Stipa", "role": "President", "president": true }
+          ],
+          [
+            { "avatar": "KN", "name": "Karl Nuyts", "role": "Vice President" },
+            { "avatar": "PB", "name": "Pierre Baccini", "role": "Technical Director" },
+            { "avatar": "EH", "name": "Elwan El-Hafaia", "role": "Treasurer" }
+          ],
+          [
+            { "avatar": "JA", "name": "Juliette Airaud", "role": "Secretary" },
+            { "avatar": "MC", "name": "Martin Chollet", "role": "Communication" },
+            { "avatar": "AN", "name": "Alejandro Navarrete", "role": "Powertrain Lead" }
+          ]
+        ],
+        "advisor": { "name": "Simon Poiret" }
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "title": "Want to Join the Team?",
+        "text": "We welcome passionate students from all disciplines. Whether you're an engineer, a business student, or a creative - there's a place for you at CNFS.",
+        "threeD": true,
+        "actions": [
+          { "label": "Get in Touch", "href": "contact.html", "style": "primary" }
+        ]
+      }
+    }
+  ]
+}

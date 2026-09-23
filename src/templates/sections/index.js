@@ -8,8 +8,12 @@ import { renderCardGrid } from './card-grid.js';
 import { renderCardsSection } from './cards-section.js';
 import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
+import { renderDeptGrid } from './dept-grid.js';
 import { renderHeroAw } from './hero-aw.js';
+import { renderLabeledCardGrid } from './labeled-card-grid.js';
+import { renderLabeledSpecsGrid } from './labeled-specs-grid.js';
 import { renderMarquee } from './marquee.js';
+import { renderOrgChart } from './org-chart.js';
 import { renderPageHeader } from './page-header.js';
 import { renderSIntro } from './s-intro.js';
 import { renderSpecsGrid } from './specs-grid.js';
@@ -27,8 +31,12 @@ export const SECTIONS = {
   'cards-section': renderCardsSection,
   'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
+  'dept-grid': renderDeptGrid,
   'hero-aw': renderHeroAw,
+  'labeled-card-grid': renderLabeledCardGrid,
+  'labeled-specs-grid': renderLabeledSpecsGrid,
   'marquee': renderMarquee,
+  'org-chart': renderOrgChart,
   'page-header': renderPageHeader,
   's-intro': renderSIntro,
   'specs-grid': renderSpecsGrid,
