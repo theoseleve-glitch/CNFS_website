@@ -1,0 +1,189 @@
+{
+  "path": "index.html",
+  "title": "CNFS - Centrale Nantes Formula Student",
+  "preloader": true,
+  "meta": {
+    "description": "Centrale Nantes Formula Student - Préparer l'avenir. 20 students, one race car, built from scratch.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#0A0C10",
+    "ogTitle": "CNFS - Centrale Nantes Formula Student",
+    "ogDescription": "Préparer l'avenir. 20 students building a race car from scratch.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "preload": ["assets/images/event-formula-student-france.jpg"],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@type": "SportsTeam",
+      "name": "Centrale Nantes Formula Student",
+      "alternateName": "CNFS",
+      "url": "https://cnfs.racing",
+      "sport": "Formula Student",
+      "memberOf": { "@type": "CollegeOrUniversity", "name": "Centrale Nantes", "url": "https://www.ec-nantes.fr" },
+      "address": { "@type": "PostalAddress", "streetAddress": "1 Rue de la Noe", "addressLocality": "Nantes", "postalCode": "44300", "addressCountry": "FR" },
+      "email": "contact@cnfs.racing",
+      "telephone": "+33783990278",
+      "foundingDate": "2025-12"
+    },
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "hero-aw",
+      "props": {
+        "eyebrow": "Season 2025 / 2026",
+        "titleLines": [
+          { "text": "Centrale Nantes" },
+          { "text": "Formula Student", "emphasis": true }
+        ],
+        "desc": "20 engineering students. One race car. Built from scratch. Designed to compete at the world's largest engineering competition.",
+        "image": "assets/images/event-formula-student-france.jpg",
+        "imageAlt": "",
+        "actions": [
+          { "label": "The Project", "href": "project.html", "style": "primary" },
+          { "label": "Partner With Us", "href": "partners.html", "style": "outline" }
+        ],
+        "scrollLabel": "Scroll"
+      }
+    },
+    {
+      "type": "marquee",
+      "props": {
+        "items": [
+          "Formula Student",
+          "Season 2025/2026",
+          "Centrale Nantes",
+          "Engineering the Future",
+          "20 Members",
+          "4 Departments",
+          "One Race Car"
+        ]
+      }
+    },
+    {
+      "type": "stats-aw",
+      "props": {
+        "items": [
+          { "count": 20, "prefix": "+", "label": "Team Members" },
+          { "count": 4, "label": "Departments" },
+          { "count": 40, "prefix": "+", "suffix": "K€", "label": "Budget Target" },
+          { "count": 120, "prefix": "+", "suffix": " km/h", "label": "Top Speed" }
+        ]
+      }
+    },
+    {
+      "type": "about-parallax",
+      "props": {
+        "id": "about",
+        "image": "assets/images/car-fs-prototype.jpg",
+        "imageAlt": "CNFS team with their Formula Student car",
+        "parallax": "0.2",
+        "sIntro": {
+          "label": "Who We Are",
+          "heading": ["Engineering", "Excellence"]
+        },
+        "body": [
+          "We are <strong>Centrale Nantes Formula Student</strong>, a student-led team dedicated to designing, building, and racing a single-seat competition car from scratch every year.",
+          "20 students from all engineering disciplines, united by a passion for motorsport, innovation, and hands-on learning."
+        ],
+        "action": { "label": "Meet the Team", "href": "about.html", "style": "outline-dark" }
+      }
+    },
+    {
+      "type": "cards-section",
+      "props": {
+        "id": "formula-student",
+        "background": "gray",
+        "sIntro": {
+          "label": "The Competition",
+          "heading": "What is Formula Student?",
+          "body": "The world's largest engineering competition. Design, build, race — judged on engineering, cost, business, and performance.",
+          "leadStyle": "max-width:600px;",
+          "scroll3d": "fly-in"
+        },
+        "cards": [
+          { "icon": "&#9881;", "title": "Engineering Design", "text": "Present and defend every technical decision to a panel of industry engineers." },
+          { "icon": "&#9201;", "title": "Dynamic Events", "text": "Acceleration, skidpad, autocross, and a gruelling 22km endurance race on track." },
+          { "icon": "&#128200;", "title": "Business & Cost", "text": "Prove your car is viable — business plan, cost analysis, and manufacturing strategy." }
+        ],
+        "cta": { "label": "Explore the Competition", "href": "formula-student.html", "style": "outline-dark" }
+      }
+    },
+    {
+      "type": "car-pinned",
+      "props": {
+        "specs": [
+          { "value": "<210", "unit": "kg", "label": "Target Weight" },
+          { "value": "EMRAX", "unit": " 228", "label": "Motor Type" },
+          { "value": "110", "unit": "+", "label": "Top Speed km/h" },
+          { "value": "3.6", "unit": "s", "label": "0–100 km/h" },
+          { "value": "€40", "unit": "K", "label": "Build Budget" }
+        ],
+        "activeIndex": 0,
+        "cta": { "label": "View Full Specs", "href": "project.html", "style": "primary" }
+      }
+    },
+    {
+      "type": "timeline-split",
+      "props": {
+        "id": "goals",
+        "sIntro": {
+          "label": "Our Vision",
+          "heading": ["From Concept", "to Autonomous"]
+        },
+        "timelineItems": [
+          { "date": "2025/2026", "title": "Year 1: Concept Class", "text": "Project Falcon. EMRAX 228 electric motor, tubular steel chassis. Enter FS France concept class at Transpolis." },
+          { "date": "Year 2", "title": "Full Electric Competition", "text": "Compete with the fully built EV. Refine powertrain, battery management, and on-track performance." },
+          { "date": "Future", "title": "Autonomous — Someday", "text": "Driverless category. Sensor fusion, machine learning, real-time autonomous decisions." }
+        ],
+        "cards": [
+          { "icon": "&#127942;", "title": "Competition Ready", "text": "Our goal: compete at Formula Student France (Transpolis) in Year 1, proving ourselves against established European teams.", "stacked": true },
+          { "icon": "&#127891;", "title": "Learning by Doing", "text": "Not just a race — an educational platform. Classroom theory meets real-world engineering.", "stacked": true },
+          { "icon": "&#129309;", "title": "Industry Partnerships", "text": "Lasting relationships with partners who provide funding, materials, software, and expertise.", "stacked": false }
+        ]
+      }
+    },
+    {
+      "type": "sponsors-section",
+      "props": {
+        "id": "sponsors",
+        "background": "gray",
+        "sIntro": {
+          "label": "They Support Us",
+          "heading": "Our Sponsors",
+          "scroll3d": "fly-in"
+        },
+        "tiers": [
+          { "label": "Gold Partners", "scroll3d": "tilt-up", "placeholderIcon": "&#9733;", "slots": [null, null] },
+          { "label": "Silver & Bronze Partners", "scroll3d": "tilt-up", "placeholderIcon": "+", "slots": [null, null, null] }
+        ],
+        "cta": { "label": "Become a Partner", "href": "partners.html", "style": "outline-dark" }
+      }
+    },
+    {
+      "type": "cta-banner",
+      "props": {
+        "heading": ["Support the Next", "Generation of Engineers"],
+        "text": "Partner with CNFS and gain visibility among 20 future engineers while supporting innovation in motorsport education.",
+        "actions": [
+          { "label": "Become a Partner", "href": "partners.html", "style": "primary" },
+          { "label": "Contact Us", "href": "contact.html", "style": "outline" }
+        ]
+      }
+    }
+  ]
+}

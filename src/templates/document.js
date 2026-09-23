@@ -69,6 +69,21 @@ export function renderDocument({ page, globals, theme, body }) {
     ? `<script type="application/ld+json">${raw(JSON.stringify(h.jsonLd))}</script>`
     : '';
 
+  // The preloader overlay and grain texture div sit immediately inside
+  // <body>, before everything else, only on index.html in the source (no
+  // other page has them). They are document furniture, not page content, so
+  // they live here behind an explicit page flag rather than as a section.
+  const chrome = page.preloader
+    ? `<div class="preloader" role="status" aria-label="Loading">
+    <div class="preloader__logo">${esc((globals.brand || {}).name)}</div>
+    <div class="preloader__bar"><div class="preloader__fill"></div></div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  `
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +112,7 @@ ${fontsComment}
   ${noscript}
 </head>
 <body${attr('class', page.bodyClass)}>
-${body}
+${chrome}${body}
 ${each(page.scripts, (src) => `<script src="${attrEsc(src)}"></script>`)}
 </body>
 </html>`;

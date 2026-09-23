@@ -1,18 +1,42 @@
 // Section registry. No Node built-ins: this module is imported by the
 // Cloudflare Workers runtime.
 
+import { renderAboutParallax } from './about-parallax.js';
 import { renderAboutPreview } from './about-preview.js';
+import { renderCarPinned } from './car-pinned.js';
 import { renderCardGrid } from './card-grid.js';
+import { renderCardsSection } from './cards-section.js';
+import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
+import { renderHeroAw } from './hero-aw.js';
+import { renderMarquee } from './marquee.js';
 import { renderPageHeader } from './page-header.js';
+import { renderSIntro } from './s-intro.js';
 import { renderSpecsGrid } from './specs-grid.js';
+import { renderSponsorGrid } from './sponsor-grid.js';
+import { renderSponsorsSection } from './sponsors-section.js';
+import { renderStatsAw } from './stats-aw.js';
+import { renderTimeline } from './timeline.js';
+import { renderTimelineSplit } from './timeline-split.js';
 
 export const SECTIONS = {
+  'about-parallax': renderAboutParallax,
   'about-preview': renderAboutPreview,
+  'car-pinned': renderCarPinned,
   'card-grid': renderCardGrid,
+  'cards-section': renderCardsSection,
+  'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
+  'hero-aw': renderHeroAw,
+  'marquee': renderMarquee,
   'page-header': renderPageHeader,
-  'specs-grid': renderSpecsGrid
+  's-intro': renderSIntro,
+  'specs-grid': renderSpecsGrid,
+  'sponsor-grid': renderSponsorGrid,
+  'sponsors-section': renderSponsorsSection,
+  'stats-aw': renderStatsAw,
+  'timeline': renderTimeline,
+  'timeline-split': renderTimelineSplit
 };
 
 export function renderSection(section, ctx = {}) {
