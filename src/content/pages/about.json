@@ -114,7 +114,7 @@
         "intro": "20 students organized across 4 specialized departments, led by a dedicated executive team.",
         "levels": [
           [
-            { "avatar": "TS", "name": "Théo Stipa", "role": "President", "president": true }
+            { "avatar": "TS", "name": "Théo Stipa", "role": "President" }
           ],
           [
             { "avatar": "KN", "name": "Karl Nuyts", "role": "Vice President" },

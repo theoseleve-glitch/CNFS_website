@@ -118,3 +118,45 @@ test('the label prop is escaped as text content, not rendered as live markup', (
   assert.ok(html.includes('<span class="section-label">&lt;b&gt;x&lt;/b&gt;</span>'));
   assert.ok(!html.includes('<b>x</b>'));
 });
+
+test('dept-grid renders one dept-card per entry, omitting absent intro and icon', () => {
+  const html = renderSection({
+    type: 'dept-grid',
+    props: { depts: [{ name: 'A', text: 'a' }, { name: 'B', text: 'b' }] }
+  });
+  assert.equal(html.match(/class="dept-card"/g).length, 2);
+  assert.ok(!html.includes('undefined'));
+  assert.ok(!html.includes('lead--centered'));
+});
+
+test('org-chart renders one org-chart__level per level', () => {
+  const html = renderSection({
+    type: 'org-chart',
+    props: { levels: [[{ avatar: 'A', name: 'A', role: 'r' }], [{ avatar: 'B', name: 'B', role: 'r' }]] }
+  });
+  assert.equal(html.match(/class="org-chart__level"/g).length, 2);
+});
+
+test('org-chart derives team-member--president from position: only the first member of the first level gets it', () => {
+  const html = renderSection({
+    type: 'org-chart',
+    props: {
+      levels: [
+        [{ avatar: 'A', name: 'A', role: 'President' }],
+        [{ avatar: 'B', name: 'B', role: 'VP' }, { avatar: 'C', name: 'C', role: 'Treasurer' }]
+      ]
+    }
+  });
+  assert.equal(html.match(/team-member--president/g).length, 1);
+});
+
+test('org-chart escapes member name and role as text, not live markup', () => {
+  const html = renderSection({
+    type: 'org-chart',
+    props: { levels: [[{ avatar: 'A', name: '<b>x</b>', role: '<i>y</i>' }]] }
+  });
+  assert.ok(html.includes('&lt;b&gt;x&lt;/b&gt;'));
+  assert.ok(html.includes('&lt;i&gt;y&lt;/i&gt;'));
+  assert.ok(!html.includes('<b>x</b>'));
+  assert.ok(!html.includes('<i>y</i>'));
+});
