@@ -28,6 +28,12 @@ test('about-preview omits the image block entirely when there is no image', () =
   assert.ok(!html.includes('about-preview__image'));
 });
 
+test('RICH TEXT: about-preview body is intentionally raw and must be sanitised on write', () => {
+  const html = renderSection({ type: 'about-preview', props: { title: 'T', body: ['<strong>bold</strong>'] } });
+  assert.ok(html.includes('<strong>bold</strong>'));
+  assert.ok(!html.includes('&lt;strong&gt;'));
+});
+
 test('cta-section omits the button group when there are no actions', () => {
   const html = renderSection({ type: 'cta-section', props: { title: 'T', text: 'x' } });
   assert.ok(!html.includes('btn-group'));

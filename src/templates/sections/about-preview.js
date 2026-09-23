@@ -14,6 +14,20 @@
 
 import { esc, attrEsc, raw, cls, each } from '../lib/html.js';
 
+// RICH TEXT FIELD: `body[]` is deliberately rendered with raw(), not esc().
+// WHY: the source paragraphs carry inline markup — e.g. src/about.html has
+// <p>...<strong>Centrale Nantes Formula Student</strong> is a...</p> and
+// src/project.html has <p>Our target: enter <strong>concept class</strong>
+// at...</p>. esc() would turn those tags into visible "&lt;strong&gt;" text
+// and break byte parity with the source.
+// RISK: this makes `body` an injection point the moment it becomes
+// CMS-editable — raw() performs no sanitisation at all. A later phase MUST
+// sanitise `body` ON WRITE, server-side, against the whitelist
+// b, i, em, strong, br, a[href] (project spec section 8) before accepting
+// any external input; render-time escaping is not a substitute for that.
+// No other prose field in this module may be switched to raw() on this
+// precedent — eyebrow, title and action labels below all stay on esc()/
+// attrEsc() because they carry no inline markup in the source.
 function renderBody(body) {
   return each(body || [], (p, i) => (i === 0 ? `<p class="lead">${raw(p)}</p>` : `<p>${raw(p)}</p>`));
 }
