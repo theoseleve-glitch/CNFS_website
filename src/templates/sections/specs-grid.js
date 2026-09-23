@@ -3,20 +3,23 @@
 // wrapper's --gray/--dark modifier is data-driven via the optional
 // `background` prop rather than hardcoded (project.html and about.html's own
 // specs-grid instance both happen to use --dark, but the prop keeps this
-// generalisable rather than assumed). The prop shape has no eyebrow/intro
-// field, so the section-label span and lead paragraph seen above the heading
-// on src/about.html's instance are intentionally not reproduced here — only
-// title/specs/background are data-driven. No Node built-ins: this module is
-// imported by the Cloudflare Workers runtime.
+// generalisable rather than assumed). Ruling 21: the section-label span and
+// lead paragraph seen above the heading on src/about.html's instance are
+// available via the optional `label`/`intro` props — both omitted entirely
+// when absent, so pre-Ruling-21 callers that never set them render
+// byte-identically to before. No Node built-ins: this module is imported by
+// the Cloudflare Workers runtime.
 
 import { esc, cls, each } from '../lib/html.js';
 
 export function renderSpecsGrid(props, ctx) {
   const specs = props.specs || [];
 
-  const header = props.title
+  const header = (props.label || props.title || props.intro)
     ? `<div class="text-center" data-scroll-3d="fly-in">
-      <h2 class="section-title section-title--center">${esc(props.title)}</h2>
+      ${props.label ? `<span class="section-label">${esc(props.label)}</span>` : ''}
+      ${props.title ? `<h2 class="section-title section-title--center">${esc(props.title)}</h2>` : ''}
+      ${props.intro ? `<p class="lead lead--centered">${esc(props.intro)}</p>` : ''}
     </div>`
     : '';
 

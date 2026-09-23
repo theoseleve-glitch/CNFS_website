@@ -94,3 +94,27 @@ test('cta-section threeD prop selects the cta-3d modifier', () => {
   assert.ok(withoutThreeD.includes('class="cta-section"'));
   assert.ok(!withoutThreeD.includes('cta-3d'));
 });
+
+// Ruling 21: card-grid/specs-grid gained an optional `label` prop (the
+// section-label eyebrow) instead of forking into labeled-* sibling types.
+test('card-grid renders the section-label span only when a label is given', () => {
+  const withLabel = renderSection({ type: 'card-grid', props: { label: 'Our Mission', cards: [] } });
+  assert.ok(withLabel.includes('<span class="section-label">Our Mission</span>'));
+
+  const withoutLabel = renderSection({ type: 'card-grid', props: { cards: [] } });
+  assert.ok(!withoutLabel.includes('section-label'));
+});
+
+test('specs-grid renders the section-label span only when a label is given', () => {
+  const withLabel = renderSection({ type: 'specs-grid', props: { label: 'Centrale Nantes', specs: [] } });
+  assert.ok(withLabel.includes('<span class="section-label">Centrale Nantes</span>'));
+
+  const withoutLabel = renderSection({ type: 'specs-grid', props: { specs: [] } });
+  assert.ok(!withoutLabel.includes('section-label'));
+});
+
+test('the label prop is escaped as text content, not rendered as live markup', () => {
+  const html = renderSection({ type: 'card-grid', props: { label: '<b>x</b>', cards: [] } });
+  assert.ok(html.includes('<span class="section-label">&lt;b&gt;x&lt;/b&gt;</span>'));
+  assert.ok(!html.includes('<b>x</b>'));
+});

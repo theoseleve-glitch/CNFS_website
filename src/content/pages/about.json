@@ -53,9 +53,9 @@
       }
     },
     {
-      "type": "labeled-card-grid",
+      "type": "card-grid",
       "props": {
-        "eyebrow": "Our Mission",
+        "label": "Our Mission",
         "title": "What Drives Us",
         "background": "gray",
         "cards": [
@@ -92,9 +92,9 @@
       }
     },
     {
-      "type": "labeled-specs-grid",
+      "type": "specs-grid",
       "props": {
-        "eyebrow": "Centrale Nantes",
+        "label": "Centrale Nantes",
         "title": "Our University",
         "intro": "Centrale Nantes is one of France's leading engineering schools (Grande Ecole), renowned for excellence in mechanical engineering, energy, and naval engineering. Located in Nantes, a vibrant city in western France, our university provides the facilities, expertise, and support that makes CNFS possible.",
         "background": "dark",
