@@ -32,21 +32,16 @@ export function renderDocument({ page, globals, theme, body }) {
   </style></noscript>`
     : '';
 
-  // og:description uses raw(), not attrEsc(), for one reason: src/project.html's
-  // instance contains a literal, unescaped '<' — `Our car: EMRAX 228 engine,
-  // <210kg, built from scratch...` — a typo in the immutable source (it should
-  // have been &lt;210kg, as car-pinned.js's near-identical "<210" value is on
-  // index.html). attrEsc() would "fix" this into &lt;210kg and break byte
-  // parity against the frozen page. This is safe for every other page today —
-  // index.html's and about.html's ogDescription contain none of & < > " — but
-  // it does mean ogDescription is no longer defended against those characters
-  // if a future page's value contains them; like fontHref and jsonLd below,
-  // any future CMS write path for this field must validate/escape on write,
-  // since raw() performs none of that here.
+  // og:description is plain attrEsc(), same as every other meta field here.
+  // src/project.html's instance contains a literal '<' — `Our car: EMRAX 228
+  // engine, <210kg, built from scratch...` — which used to force a raw()
+  // exemption under the old blanket-escaping attrEsc(); RULING 23's attrEsc()
+  // no longer escapes '<'/'>' inside a double-quoted attribute (they cannot
+  // break out of one), so this renders correctly through the ordinary path.
   const og = m.ogTitle
     ? `\n  <!-- Open Graph -->\n  <meta property="og:type" content="website">` +
       `<meta property="og:title" content="${attrEsc(m.ogTitle)}">` +
-      `<meta property="og:description" content="${raw(m.ogDescription)}">` +
+      `<meta property="og:description" content="${attrEsc(m.ogDescription)}">` +
       `<meta property="og:image" content="${attrEsc(m.ogImage)}">` +
       `<meta property="og:site_name" content="${attrEsc(m.ogSiteName)}">`
     : '';

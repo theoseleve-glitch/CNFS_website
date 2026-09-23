@@ -1,11 +1,11 @@
 // Section: sponsors-section. Source of truth: src/index.html "SPONSORS"
 // section — an s-intro header, one sponsor-grid tier per partner level, and
 // a trailing CTA link. Composes the s-intro and sponsor-grid helpers rather
-// than duplicating their markup. The second tier's label contains a literal
-// "&" ("Silver & Bronze Partners"), which reproduces the source's
-// "Silver &amp; Bronze Partners" through the ordinary esc() text-context
-// escaper — no raw() needed, esc() already turns '&' into '&amp;'. No Node
-// built-ins: imported by the Cloudflare Workers runtime.
+// than duplicating their markup. The second tier's label reproduces the
+// source's properly-escaped "Silver &amp; Bronze Partners" — see
+// sponsor-grid.js's own header comment for why that field is raw(), not
+// esc(), as of RULING 23. No Node built-ins: imported by the Cloudflare
+// Workers runtime.
 
 import { esc, attrEsc, cls, attr, each } from '../lib/html.js';
 import { renderSIntro } from './s-intro.js';

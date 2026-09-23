@@ -83,8 +83,8 @@
           ["Powertrain", "EMRAX 228 motor, motor controller, cooling system, HV wiring", "~7,000"],
           ["Battery Pack", "Accumulator cells, BMS, enclosure, HV safety systems", "TBD"],
           ["Suspension", "Double wishbone (front push, rear pull rod), dampers, steering", "TBD"],
-          ["Brakes", "4 calipers & discs, dual-circuit lines, brake-by-wire compatibility", "TBD"],
-          ["Wheels & Tyres", "13\" Hoosier tyres, magnesium rims, LSD differential", "TBD"],
+          ["Brakes", "4 calipers &amp; discs, dual-circuit lines, brake-by-wire compatibility", "TBD"],
+          ["Wheels &amp; Tyres", "13\" Hoosier tyres, magnesium rims, LSD differential", "TBD"],
           ["Electronics", "ECU, TSAL, cockpit instruments, sensors, data acquisition, LV system", "TBD"],
           ["Miscellaneous", "Seat, harness, pedals, bodywork, fasteners, cables, hoses", "TBD"]
         ],

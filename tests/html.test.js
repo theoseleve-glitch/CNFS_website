@@ -2,8 +2,20 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { esc, attrEsc, attr, raw, cls, each } from '../src/templates/lib/html.js';
 
-test('esc escapes only the three text-context-significant characters', () => {
-  assert.equal(esc('<a> & "b" \'c\''), '&lt;a&gt; &amp; "b" \'c\'');
+test('esc always escapes < and > in text content', () => {
+  assert.equal(esc('<a> & "b" \'c\''), '&lt;a&gt; & "b" \'c\'');
+  assert.equal(esc('<b>'), '&lt;b&gt;');
+});
+
+test('esc leaves a bare & literal when it cannot start a character reference', () => {
+  assert.equal(esc('A & B'), 'A & B');
+  assert.equal(esc('Team Formation & Concept Design'), 'Team Formation & Concept Design');
+});
+
+test('esc escapes & only when it is positioned to start a character reference', () => {
+  assert.equal(esc('&amp;'), '&amp;amp;');
+  assert.equal(esc('&#39;'), '&amp;#39;');
+  assert.equal(esc('&copy;'), '&amp;copy;');
 });
 
 test('esc returns empty string for null and undefined', () => {
@@ -27,10 +39,56 @@ test('attrEsc escapes " but leaves \' untouched', () => {
   assert.equal(attrEsc(`a"b'c`), 'a&quot;b\'c');
 });
 
+test('attrEsc does not escape < or > inside a double-quoted attribute', () => {
+  assert.equal(attrEsc('<210kg'), '<210kg');
+  assert.equal(attrEsc('a " b'), 'a &quot; b');
+  assert.equal(attrEsc('A & B'), 'A & B');
+  assert.equal(attrEsc('&amp;'), '&amp;amp;');
+});
+
 test('PARITY: text escaping must not introduce entities the source does not have', () => {
   const html = esc(`France's "best" team`);
   assert.ok(!html.includes('&#39;'));
   assert.ok(!html.includes('&quot;'));
+});
+
+test('SECURITY: attribute values cannot break out of their quotes', () => {
+  // A '"' still terminates the attribute early if unescaped, so it remains
+  // the one character attrEsc() must always neutralise.
+  assert.equal(attrEsc('x" onload="alert(1)'), 'x&quot; onload=&quot;alert(1)');
+
+  // RULING 23 stops escaping '<' and '>' inside a double-quoted attribute,
+  // since neither can end the attribute or open a tag there — the HTML
+  // parser consumes everything up to the matching closing '"' as attribute
+  // text. Prove that directly: build the tag markup with an unescaped
+  // <script> payload in the attribute value, and confirm no live `<script`
+  // element appears in the surrounding tag source (the payload's `<` and
+  // `>` stay inert characters inside the quoted value, not parser-visible
+  // markup).
+  const payload = '<script>alert(1)</script>';
+  const tag = `<meta name="x" content="${attrEsc(payload)}">`;
+  assert.equal(tag, '<meta name="x" content="<script>alert(1)</script>">');
+
+  // The whole tag is still one well-formed <meta ...> element: everything
+  // up to and including the opening quote of content=" is untouched by the
+  // payload, and the string ends with exactly one '">' right after it — so
+  // the payload's '<' and '>' stay inert characters inside the quoted
+  // value; there is no SECOND, unquoted '<script' anywhere in the tag that
+  // a parser could open as a live element.
+  const openQuoteEnd = tag.indexOf('content="') + 'content="'.length;
+  assert.ok(!tag.slice(0, openQuoteEnd).includes('<script'));
+  assert.equal((tag.match(/<script/g) || []).length, 1);
+  assert.ok(tag.endsWith('</script>">'));
+});
+
+test('INVARIANT: attrEsc is safe only inside double quotes', () => {
+  // attrEsc()'s only non-negotiable job is neutralising '"', because that is
+  // the sole character that can end a double-quoted attribute value early.
+  // A single-quoted or unquoted attribute is unsupported: '\'' is left
+  // untouched (documented above attrEsc()), so hand-building either of
+  // those attribute forms with attrEsc() would remain breakable.
+  assert.equal(attrEsc('"'), '&quot;');
+  assert.equal(attrEsc("'"), "'");
 });
 
 test('attr omits the attribute entirely when the value is absent', () => {

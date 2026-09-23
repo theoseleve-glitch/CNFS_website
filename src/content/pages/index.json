@@ -143,7 +143,7 @@
         "cards": [
           { "icon": "&#9881;", "title": "Engineering Design", "text": "Present and defend every technical decision to a panel of industry engineers." },
           { "icon": "&#9201;", "title": "Dynamic Events", "text": "Acceleration, skidpad, autocross, and a gruelling 22km endurance race on track." },
-          { "icon": "&#128200;", "title": "Business & Cost", "text": "Prove your car is viable — business plan, cost analysis, and manufacturing strategy." }
+          { "icon": "&#128200;", "title": "Business &amp; Cost", "text": "Prove your car is viable — business plan, cost analysis, and manufacturing strategy." }
         ],
         "cta": { "label": "Explore the Competition", "href": "formula-student.html", "style": "outline-dark" }
       }
@@ -194,7 +194,7 @@
         },
         "tiers": [
           { "label": "Gold Partners", "scroll3d": "tilt-up", "placeholderIcon": "&#9733;", "slots": [null, null] },
-          { "label": "Silver & Bronze Partners", "scroll3d": "tilt-up", "placeholderIcon": "+", "slots": [null, null, null] }
+          { "label": "Silver &amp; Bronze Partners", "scroll3d": "tilt-up", "placeholderIcon": "+", "slots": [null, null, null] }
         ],
         "cta": { "label": "Become a Partner", "href": "partners.html", "style": "outline-dark" }
       }

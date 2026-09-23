@@ -8,26 +8,23 @@
 // existing callers that never set it render byte-identically to before. No
 // Node built-ins: this module is imported by the Cloudflare Workers runtime.
 
-import { esc, raw, cls, each } from '../lib/html.js';
+import { esc, cls, each } from '../lib/html.js';
 
-// `it.title` uses raw(), not esc(), for one reason: two of src/project.html's
+// `it.title` is plain esc(), same as date/text. Two of src/project.html's
 // timeline items ("Team Formation & Concept Design", "Assembly & Testing")
-// contain a literal, unescaped '&' in the heading text — a typo in the
-// immutable source (HTML5 tolerates an ambiguous ampersand not followed by a
-// known entity name, so it still renders as a plain '&' in a browser, but
-// esc() would "fix" it into &amp; and break byte parity against the frozen
-// page). This is safe for every other current caller — src/index.html's
-// three timeline item titles contain none of & < > — but like og:description
-// in document.js, it does mean `title` is no longer defended against those
-// characters; any future CMS write path for timeline items must
-// validate/escape this field on write.
+// contain a bare, unescaped '&' in the heading text; that used to force a
+// raw() exemption under the old blanket-escaping esc(). RULING 23's esc()
+// only escapes '&' when it could start a character reference (followed by
+// a letter or '#') — a bare '&' before a space is left alone, which is
+// exactly what these two headings need, so this renders correctly through
+// the ordinary path.
 export function renderTimeline(props) {
   const items = props.items || [];
   return `<div class="${cls('timeline', props.threeD && 'timeline-3d')}">
       ${each(items, (it) => `<div class="timeline__item">
         <div class="timeline__dot"></div>
         <div class="timeline__date">${esc(it.date)}</div>
-        <h4 class="timeline__title">${raw(it.title)}</h4>
+        <h4 class="timeline__title">${esc(it.title)}</h4>
         <p class="timeline__text">${esc(it.text)}</p>
       </div>`)}
     </div>`;
