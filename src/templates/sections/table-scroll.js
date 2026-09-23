@@ -17,24 +17,20 @@
 // aligned). A future table-scroll needing different alignment would revisit
 // this.
 //
-// Row cells use raw(), not esc(): two of the "Cost Breakdown" cells are
-// properly escaped in source ("4 calipers &amp; discs...", "Wheels &amp;
-// Tyres") — RULING 23's esc() only escapes '&' when it could start a
-// character reference (followed by a letter or '#'); here it's followed by
-// a space, so esc() would leave it bare and break byte parity against the
-// source's own `&amp;`. Same fix as card-grid's `c.title` and sponsor-grid's
-// `props.label`. Safe for every other cell today (none contain & < >); a
-// future CMS write path for row cells must validate/escape this field on
-// write. No Node built-ins: this module is imported by the Cloudflare
-// Workers runtime.
+// Row cells are plain esc(): two of the "Cost Breakdown" cells are properly
+// escaped in source ("4 calipers &amp; discs...", "Wheels &amp; Tyres"),
+// and RULING 24's entity-aware esc() reproduces both unchanged (they're
+// already complete, valid named references) — no raw() exemption needed.
+// No Node built-ins: this module is imported by the Cloudflare Workers
+// runtime.
 
-import { esc, raw, cls, each } from '../lib/html.js';
+import { esc, cls, each } from '../lib/html.js';
 
 function renderRow(cells, lastCol) {
   return `<tr>
         ${each(cells, (cell, i) => i === 0
-          ? `<td><strong>${raw(cell)}</strong></td>`
-          : `<td${i === lastCol ? ' class="text-right"' : ''}>${raw(cell)}</td>`)}
+          ? `<td><strong>${esc(cell)}</strong></td>`
+          : `<td${i === lastCol ? ' class="text-right"' : ''}>${esc(cell)}</td>`)}
       </tr>`;
 }
 

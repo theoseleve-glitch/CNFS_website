@@ -7,15 +7,36 @@ test('esc always escapes < and > in text content', () => {
   assert.equal(esc('<b>'), '&lt;b&gt;');
 });
 
-test('esc leaves a bare & literal when it cannot start a character reference', () => {
+test('esc leaves a bare & literal when it is not followed by a letter or #', () => {
   assert.equal(esc('A & B'), 'A & B');
   assert.equal(esc('Team Formation & Concept Design'), 'Team Formation & Concept Design');
+  assert.equal(esc('Cost & Manufacturing'), 'Cost & Manufacturing');
 });
 
-test('esc escapes & only when it is positioned to start a character reference', () => {
-  assert.equal(esc('&amp;'), '&amp;amp;');
-  assert.equal(esc('&#39;'), '&amp;#39;');
-  assert.equal(esc('&copy;'), '&amp;copy;');
+test('IDEMPOTENCE: esc leaves an already-valid character reference unchanged, never double-encoding it', () => {
+  assert.equal(esc('Season Kickoff &amp; Recruitment'), 'Season Kickoff &amp; Recruitment');
+  assert.equal(esc('&copy; 2026'), '&copy; 2026');
+  assert.equal(esc('&#9737;'), '&#9737;');
+  assert.equal(esc('&#x1F600;'), '&#x1F600;');
+});
+
+test('esc escapes a letter-run that looks like a reference but never completes with a ;', () => {
+  // 'AT&T & Sons': the first '&' is followed by a letter ('T') but the run
+  // is never terminated by ';' anywhere, so it is not actually a reference
+  // and gets escaped. The second '&' is followed by a space — never even a
+  // candidate — so it stays bare, exactly like the 'Cost & Manufacturing'
+  // case above. Both outcomes appear in one string on purpose: this is the
+  // exact ambiguity RULING 23's plain "next character" rule could not
+  // resolve, and RULING 24's completion check does.
+  assert.equal(esc('AT&T & Sons'), 'AT&amp;T & Sons');
+});
+
+test('esc always escapes a raw < even when an adjacent & forms a valid entity', () => {
+  // A complete, valid reference is passed through unchanged (safe — it
+  // decodes to inert text, never markup) while a genuinely raw '<' is still
+  // caught unconditionally, in the very same string.
+  assert.equal(esc('&lt;script&gt;'), '&lt;script&gt;');
+  assert.equal(esc('<script>'), '&lt;script&gt;');
 });
 
 test('esc returns empty string for null and undefined', () => {
@@ -43,7 +64,19 @@ test('attrEsc does not escape < or > inside a double-quoted attribute', () => {
   assert.equal(attrEsc('<210kg'), '<210kg');
   assert.equal(attrEsc('a " b'), 'a &quot; b');
   assert.equal(attrEsc('A & B'), 'A & B');
-  assert.equal(attrEsc('&amp;'), '&amp;amp;');
+});
+
+test('IDEMPOTENCE: attrEsc leaves an already-valid character reference unchanged, never double-encoding it', () => {
+  assert.equal(attrEsc('&amp;'), '&amp;');
+  assert.equal(attrEsc('&#39;'), '&#39;');
+  assert.equal(attrEsc('&#x1F600;'), '&#x1F600;');
+});
+
+test('attrEsc escapes a letter-run that looks like a reference but never completes with a ;', () => {
+  // Same ambiguity as esc()'s equivalent test, in an attribute-value string:
+  // the first '&' (followed by 'T', never terminated by ';') is escaped; the
+  // second (followed by a space) stays bare.
+  assert.equal(attrEsc('AT&T & Sons'), 'AT&amp;T & Sons');
 });
 
 test('PARITY: text escaping must not introduce entities the source does not have', () => {

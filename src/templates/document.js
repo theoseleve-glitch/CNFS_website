@@ -64,11 +64,15 @@ export function renderDocument({ page, globals, theme, body }) {
   // structural constant reproduced verbatim from the source (the Google Fonts URL),
   // not free-form editable content, and it is the only attribute value anywhere in
   // the 9 source pages that carries a raw, unescaped '&' (family=X&family=Y&...).
-  // No attribute in the source ever uses '&amp;'. attrEsc() escapes '&' to '&amp;',
-  // which would break byte parity against every page. raw() reproduces it exactly.
-  // If this field ever becomes user-editable, it MUST be validated as a well-formed
-  // URL on write (e.g. an allowlisted host, no quote/angle-bracket characters) —
-  // raw() inside an attribute is an injection point for anything not pre-validated.
+  // No attribute in the source ever uses '&amp;'. Even RULING 24's entity-aware
+  // attrEsc() still escapes this '&' to '&amp;': `&family=` is followed by a letter
+  // (looks like a candidate reference) but never completes into one (no terminating
+  // ';' — '=' follows the letters instead), so it falls into the "looks like but
+  // isn't" case that both escapers still escape. That would break byte parity
+  // against every page. raw() reproduces it exactly. If this field ever becomes
+  // user-editable, it MUST be validated as a well-formed URL on write (e.g. an
+  // allowlisted host, no quote/angle-bracket characters) — raw() inside an
+  // attribute is an injection point for anything not pre-validated.
   const fontLink = h.fontHref ? `<link href="${raw(h.fontHref)}" rel="stylesheet">` : '';
 
   // The source hand-formats this block (indented, spaced JSON); JSON.stringify()

@@ -2,10 +2,10 @@
 // section — an s-intro header, one sponsor-grid tier per partner level, and
 // a trailing CTA link. Composes the s-intro and sponsor-grid helpers rather
 // than duplicating their markup. The second tier's label reproduces the
-// source's properly-escaped "Silver &amp; Bronze Partners" — see
-// sponsor-grid.js's own header comment for why that field is raw(), not
-// esc(), as of RULING 23. No Node built-ins: imported by the Cloudflare
-// Workers runtime.
+// source's properly-escaped "Silver &amp; Bronze Partners" through
+// sponsor-grid.js's plain esc() call — RULING 24's entity-aware esc()
+// leaves an already-valid entity like this one unchanged. No Node
+// built-ins: imported by the Cloudflare Workers runtime.
 
 import { esc, attrEsc, cls, attr, each } from '../lib/html.js';
 import { renderSIntro } from './s-intro.js';
