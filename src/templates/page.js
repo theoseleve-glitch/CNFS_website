@@ -14,23 +14,39 @@ import { renderHeader } from './globals/header.js';
 import { renderFooter } from './globals/footer.js';
 import { renderSection } from './sections/index.js';
 
+// A plain object here means "mergeable record", not an array or null — both
+// are typeof 'object' in JS but neither has independent keys worth merging.
+function isPlainObject(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 // index.html's header/footer chrome genuinely differs from the other 8 pages
 // (shorter footer brand copy, "About"/"Contact" instead of "About Us"/
 // "Contact Us", a shorter copyright line, no "A student project at" credit
 // prefix) even though it shares the same frozen globals.json. Rather than
 // forking globals.json per page, a page may supply `globalsOverride` to
-// patch just the keys that differ. The merge is intentionally shallow: each
-// top-level key in the override replaces the corresponding globals key
-// outright, except `footer`, which is merged one level deeper so a page can
-// override e.g. `footer.brandDesc` alone without having to restate
-// `footer.columns`. No deep-merge/recursion beyond that one nested level.
-// With no `globalsOverride`, this is a no-op and output is byte-identical to
-// before.
-function mergeGlobals(globals, override) {
+// patch just the keys that differ.
+//
+// The merge is one level deep, applied uniformly to every top-level key (no
+// per-key special case): for a key present in the override, if BOTH the base
+// and override values are plain objects, they are merged one level deep —
+// override keys win, base keys not mentioned survive (e.g. overriding
+// `footer.brandDesc` alone does not require restating `footer.columns`).
+// Otherwise — arrays, scalars, null, or a base/override type mismatch — the
+// override value replaces the base value wholesale. No recursion beyond this
+// one level and no deep-merge helper: a page that wants to replace a whole
+// nested object restates its keys, which is visible in the JSON rather than
+// silently dropping sibling keys.
+//
+// With no `globalsOverride`, this returns `globals` unchanged, so the other
+// 8 pages render byte-identically to before this existed.
+export function mergeGlobals(globals, override) {
   if (!override) return globals;
-  const merged = { ...globals, ...override };
-  if (override.footer) {
-    merged.footer = { ...(globals.footer || {}), ...override.footer };
+  const merged = { ...globals };
+  for (const key of Object.keys(override)) {
+    merged[key] = isPlainObject(globals[key]) && isPlainObject(override[key])
+      ? { ...globals[key], ...override[key] }
+      : override[key];
   }
   return merged;
 }
