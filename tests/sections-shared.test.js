@@ -50,3 +50,41 @@ test('every registered type is a function', () => {
     assert.equal(typeof fn, 'function', `${type} is not a function`);
   }
 });
+
+// Ruling 15: the .section wrapper's --gray/--dark modifier is a `background`
+// prop on every section type that renders it, not a hardcoded default.
+for (const type of ['card-grid', 'about-preview', 'specs-grid']) {
+  test(`${type} background prop selects the wrapper modifier`, () => {
+    const base = type === 'card-grid'
+      ? { cards: [] }
+      : type === 'about-preview'
+        ? { title: 'T', body: ['p'] }
+        : { specs: [] };
+
+    const noBg = renderSection({ type, props: base });
+    assert.ok(noBg.includes('class="section"'), `${type} with no background should be class="section"`);
+    assert.ok(!noBg.includes('section--gray') && !noBg.includes('section--dark'));
+
+    const gray = renderSection({ type, props: { ...base, background: 'gray' } });
+    assert.ok(gray.includes('class="section section--gray"'));
+
+    const dark = renderSection({ type, props: { ...base, background: 'dark' } });
+    assert.ok(dark.includes('class="section section--dark"'));
+
+    // An unrecognised value must degrade to the safe plain default, never
+    // emit an arbitrary class (these values will come from a CMS in a later
+    // phase).
+    const unknown = renderSection({ type, props: { ...base, background: 'blue' } });
+    assert.ok(unknown.includes('class="section"'));
+    assert.ok(!unknown.includes('section--blue'));
+  });
+}
+
+test('cta-section threeD prop selects the cta-3d modifier', () => {
+  const withThreeD = renderSection({ type: 'cta-section', props: { title: 'T', text: 'x', threeD: true } });
+  assert.ok(withThreeD.includes('class="cta-section cta-3d"'));
+
+  const withoutThreeD = renderSection({ type: 'cta-section', props: { title: 'T', text: 'x' } });
+  assert.ok(withoutThreeD.includes('class="cta-section"'));
+  assert.ok(!withoutThreeD.includes('cta-3d'));
+});

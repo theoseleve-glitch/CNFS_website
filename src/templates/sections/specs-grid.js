@@ -1,14 +1,15 @@
 // Section: specs-grid. Source of truth: src/project.html "Key Specifications"
-// grid (.specs-grid.specs-3d of .spec-card items), outer wrapper
-// <section class="section section--dark"> — the same wrapper class is used
-// by every specs-grid instance in the source (src/about.html's "Our
-// University" block included), so it is hardcoded rather than parameterised.
-// The prop shape has no eyebrow/intro field, so the section-label span and
-// lead paragraph seen above the heading on src/about.html's instance are
-// intentionally not reproduced here — only title/specs are data-driven. No
-// Node built-ins: this module is imported by the Cloudflare Workers runtime.
+// grid (.specs-grid.specs-3d of .spec-card items). Ruling 15: the outer
+// wrapper's --gray/--dark modifier is data-driven via the optional
+// `background` prop rather than hardcoded (project.html and about.html's own
+// specs-grid instance both happen to use --dark, but the prop keeps this
+// generalisable rather than assumed). The prop shape has no eyebrow/intro
+// field, so the section-label span and lead paragraph seen above the heading
+// on src/about.html's instance are intentionally not reproduced here — only
+// title/specs/background are data-driven. No Node built-ins: this module is
+// imported by the Cloudflare Workers runtime.
 
-import { esc, each } from '../lib/html.js';
+import { esc, cls, each } from '../lib/html.js';
 
 export function renderSpecsGrid(props, ctx) {
   const specs = props.specs || [];
@@ -19,7 +20,13 @@ export function renderSpecsGrid(props, ctx) {
     </div>`
     : '';
 
-  return `<section class="section section--dark">
+  const sectionClass = cls(
+    'section',
+    props.background === 'gray' && 'section--gray',
+    props.background === 'dark' && 'section--dark'
+  );
+
+  return `<section class="${sectionClass}">
   <div class="container">
     ${header}
     <div class="specs-grid specs-3d">

@@ -1,17 +1,15 @@
 // Section: card-grid. Source of truth: src/about.html "What Drives Us" grid
-// (.grid.grid--3.grid-decon of .card items), outer wrapper
-// <section class="section section--gray">, reused with the same inner
-// structure on src/formula-student.html and src/partners.html (though
-// src/events.html reuses the .grid.grid--3.grid-decon/.card markup under a
-// plain <section class="section"> with no --gray modifier — the prop shape
-// has no background-variant field, so that page's instance cannot be
-// byte-matched by this template as written; see task-7-report.md). The prop
-// shape also has no eyebrow field, so the section-label span seen above the
-// heading in the source pages is intentionally not reproduced here — only
-// title/intro/cards are data-driven. No Node built-ins: imported by the
-// Cloudflare Workers runtime.
+// (.grid.grid--3.grid-decon of .card items). Ruling 15: the outer wrapper's
+// --gray/--dark modifier is not consistent across sources (src/events.html
+// reuses the same inner .grid.grid--3.grid-decon/.card markup under a plain
+// <section class="section">), so it is data-driven via the optional
+// `background` prop rather than hardcoded. The prop shape also has no
+// eyebrow field, so the section-label span seen above the heading in the
+// source pages is intentionally not reproduced here — only
+// title/intro/columns/background/cards are data-driven. No Node built-ins:
+// imported by the Cloudflare Workers runtime.
 
-import { esc, raw, each } from '../lib/html.js';
+import { esc, raw, cls, each } from '../lib/html.js';
 
 export function renderCardGrid(props, ctx) {
   const cards = props.cards || [];
@@ -24,7 +22,13 @@ export function renderCardGrid(props, ctx) {
     </div>`
     : '';
 
-  return `<section class="section section--gray">
+  const sectionClass = cls(
+    'section',
+    props.background === 'gray' && 'section--gray',
+    props.background === 'dark' && 'section--dark'
+  );
+
+  return `<section class="${sectionClass}">
   <div class="container">
     ${header}
     <div class="grid grid--${columns} grid-decon">

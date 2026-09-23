@@ -1,7 +1,9 @@
 // Section: about-preview. Source of truth: src/about.html — outer wrapper is
-// always <section class="section"> (never a --gray/--dark variant, checked
-// across every about-preview instance in the source), containing the
-// .about-preview grid of a content block then an image block. src/index.html
+// always <section class="section"> in every about-preview instance in the
+// source (never a --gray/--dark variant), but Ruling 15 adds the optional
+// `background` prop for consistency with the other .section-wrapped types
+// (card-grid, specs-grid) and future pages, containing the .about-preview
+// grid of a content block then an image block. src/index.html
 // reorders content/image via `reversed` (image first — same two divs, swapped
 // DOM order; the 2-column CSS grid has no template-areas, so DOM order alone
 // controls the visual order). `accent` and `actions` have no about.html
@@ -43,7 +45,13 @@ export function renderAboutPreview(props, ctx) {
   const image = renderImage(props);
   const blocks = props.reversed ? image + content : content + image;
 
-  return `<section class="section">
+  const sectionClass = cls(
+    'section',
+    props.background === 'gray' && 'section--gray',
+    props.background === 'dark' && 'section--dark'
+  );
+
+  return `<section class="${sectionClass}">
   <div class="container">
     <div class="${cls('about-preview', props.reversed && 'about-preview--reversed')}">
       ${blocks}
