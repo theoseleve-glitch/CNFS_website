@@ -18,7 +18,9 @@ import { renderSpecsGrid } from './specs-grid.js';
 import { renderSponsorGrid } from './sponsor-grid.js';
 import { renderSponsorsSection } from './sponsors-section.js';
 import { renderStatsAw } from './stats-aw.js';
+import { renderTableScroll } from './table-scroll.js';
 import { renderTimeline } from './timeline.js';
+import { renderTimelineRoadmap } from './timeline-roadmap.js';
 import { renderTimelineSplit } from './timeline-split.js';
 
 export const SECTIONS = {
@@ -39,7 +41,9 @@ export const SECTIONS = {
   'sponsor-grid': renderSponsorGrid,
   'sponsors-section': renderSponsorsSection,
   'stats-aw': renderStatsAw,
+  'table-scroll': renderTableScroll,
   'timeline': renderTimeline,
+  'timeline-roadmap': renderTimelineRoadmap,
   'timeline-split': renderTimelineSplit
 };
 

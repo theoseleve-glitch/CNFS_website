@@ -1,0 +1,132 @@
+{
+  "path": "project.html",
+  "title": "The Project - CNFS",
+  "meta": {
+    "description": "The CNFS car project - technical specifications, cost breakdown, timeline, and engineering goals.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "The Project - CNFS",
+    "ogDescription": "Our car: EMRAX 228 engine, <210kg, built from scratch by students at Centrale Nantes.",
+    "ogImage": "assets/images/motor-emrax-228.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "The Project" }
+        ],
+        "title": "The Project"
+      }
+    },
+    {
+      "type": "about-preview",
+      "props": {
+        "eyebrow": "Season 2025/2026",
+        "title": "Project Falcon",
+        "body": [
+          "An electric single-seat race car — Project <strong>Falcon</strong> — designed and built entirely by students at Centrale Nantes.",
+          "Powered by an EMRAX 228 electric motor on a tubular steel chassis with double-wishbone suspension, 13\" Hoosier tyres on magnesium rims, and an LSD differential. No aerodynamic package for Year 1 — pure mechanical grip.",
+          "Our target: enter <strong>concept class</strong> at Formula Student France (Transpolis), August 2026."
+        ],
+        "image": "assets/images/motor-emrax-228.jpg",
+        "imageAlt": "EMRAX 228 electric motor — the heart of Project Falcon",
+        "accent": true
+      }
+    },
+    {
+      "type": "specs-grid",
+      "props": {
+        "label": "Technical Data",
+        "title": "Key Specifications",
+        "background": "dark",
+        "specs": [
+          { "value": "EMRAX 228", "label": "Electric Motor" },
+          { "value": "EV", "label": "Category" },
+          { "value": "210 kg", "label": "Weight (without driver)" },
+          { "value": "120 km/h", "label": "Top Speed" },
+          { "value": "3.6s", "label": "0–100 km/h" },
+          { "value": "1525mm", "label": "Wheelbase" },
+          { "value": "13\"", "label": "Hoosier / Mg Rims" },
+          { "value": "LSD", "label": "Differential" }
+        ]
+      }
+    },
+    {
+      "type": "table-scroll",
+      "props": {
+        "label": "Financials",
+        "title": "Cost Breakdown",
+        "intro": "Detailed component-by-component budget for our first-year car build.",
+        "background": "dark",
+        "columns": ["Category", "Components", "Cost (EUR)"],
+        "rows": [
+          ["Chassis", "Tubular steel frame, roll hoops, structural mounts", "TBD"],
+          ["Powertrain", "EMRAX 228 motor, motor controller, cooling system, HV wiring", "~7,000"],
+          ["Battery Pack", "Accumulator cells, BMS, enclosure, HV safety systems", "TBD"],
+          ["Suspension", "Double wishbone (front push, rear pull rod), dampers, steering", "TBD"],
+          ["Brakes", "4 calipers & discs, dual-circuit lines, brake-by-wire compatibility", "TBD"],
+          ["Wheels & Tyres", "13\" Hoosier tyres, magnesium rims, LSD differential", "TBD"],
+          ["Electronics", "ECU, TSAL, cockpit instruments, sensors, data acquisition, LV system", "TBD"],
+          ["Miscellaneous", "Seat, harness, pedals, bodywork, fasteners, cables, hoses", "TBD"]
+        ],
+        "total": { "label": "Total Build Budget", "value": "40,000" }
+      }
+    },
+    {
+      "type": "timeline-roadmap",
+      "props": {
+        "left": {
+          "label": "Project Timeline",
+          "title": "Season 2025/2026",
+          "items": [
+            { "date": "September 2026", "title": "Team Formation & Concept Design", "text": "Recruit team members, define team structure, begin concept design and establish sponsor relationships." },
+            { "date": "October - December 2026", "title": "Detailed Design Phase", "text": "CAD modelling, FEA simulation, component selection. Each department finalizes their subsystem design." },
+            { "date": "January - March 2027", "title": "Manufacturing", "text": "Fabrication begins in university workshops. Chassis welding, component machining, electronics assembly." },
+            { "date": "April - May 2027", "title": "Assembly & Testing", "text": "Full car assembly, systems integration, shake-down testing, driver training, and tuning." },
+            { "date": "Summer 2026", "title": "Competition", "text": "Formula Student France (Transpolis). Our first time on track, competing against teams from across Europe." }
+          ]
+        },
+        "right": {
+          "label": "Long-Term Vision",
+          "title": "Roadmap",
+          "cards": [
+            { "icon": "Y1", "title": "Year 1: Concept Class", "text": "Design and enter FS France concept class with our EV — Project Falcon. Establish team processes and industry partnerships.", "stacked": true },
+            { "icon": "Y2", "iconVariant": "accent", "title": "Year 2: Full Electric Competition", "text": "Compete with a fully built electric vehicle. Refine the EMRAX 228 powertrain, battery system, and chassis for on-track performance.", "stacked": true },
+            { "icon": "Future", "iconVariant": "dark", "title": "Autonomous — Someday", "text": "Long-term vision: enter the driverless category with sensor fusion, machine learning, and autonomous decision-making.", "stacked": false }
+          ]
+        }
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "title": "Help Us Build This Car",
+        "text": "Every component needs funding. Partner with us and see your brand on the track.",
+        "threeD": true,
+        "actions": [
+          { "label": "Become a Partner", "href": "partners.html", "style": "primary" },
+          { "label": "Contact Us", "href": "contact.html", "style": "outline" }
+        ]
+      }
+    }
+  ]
+}
