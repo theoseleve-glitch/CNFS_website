@@ -23,6 +23,15 @@ export function renderDocument({ page, globals, theme, body }) {
 
   const canonical = page.path ? `<link rel="canonical" href="${esc(page.path)}">` : '';
 
+  const description = m.description ? `<meta name="description" content="${esc(m.description)}">` : '';
+
+  const noscript = h.noscript
+    ? `<noscript><style>
+    *, *::before, *::after { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .preloader { display: none !important; }
+  </style></noscript>`
+    : '';
+
   const og = m.ogTitle
     ? `\n  <!-- Open Graph -->\n  <meta property="og:type" content="website">` +
       `<meta property="og:title" content="${esc(m.ogTitle)}">` +
@@ -53,7 +62,7 @@ export function renderDocument({ page, globals, theme, body }) {
   ${robots}
   ${hreflang}
   ${canonical}
-  <meta name="description" content="${esc(m.description)}">
+  ${description}
   <title>${esc(page.title)}</title>
   ${favicon}
 ${og}
@@ -69,10 +78,7 @@ ${fontsComment}
   ${jsonLd}
   ${renderThemeVars(theme)}
 
-  <noscript><style>
-    *, *::before, *::after { opacity: 1 !important; transform: none !important; transition: none !important; }
-    .preloader { display: none !important; }
-  </style></noscript>
+  ${noscript}
 </head>
 <body${attr('class', page.bodyClass)}>
 ${body}
