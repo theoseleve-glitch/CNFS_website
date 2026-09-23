@@ -1,8 +1,11 @@
 import { esc, attrEsc, cls, each } from '../lib/html.js';
 
-export function renderHeader({ globals, currentPath, transparent = true }) {
+export function renderHeader({ globals, currentPath, transparent = true, magneticCta = false }) {
   const b = globals.brand || {};
   const cta = globals.navCta;
+  const ctaLink = cta
+    ? `<a href="${attrEsc(cta.href)}" class="btn btn--primary btn--sm main-nav__cta">${esc(cta.label)}</a>`
+    : '';
 
   return `<header class="${cls('site-header', transparent && 'site-header--transparent')}" role="banner">
   <div class="container container--wide">
@@ -24,7 +27,7 @@ export function renderHeader({ globals, currentPath, transparent = true }) {
           `<li><a href="${attrEsc(item.href)}" class="${cls('main-nav__link', item.href === currentPath && 'main-nav__link--active')}">${esc(item.label)}</a></li>`
         )}
       </ul>
-      ${cta ? `<a href="${attrEsc(cta.href)}" class="btn btn--primary btn--sm main-nav__cta">${esc(cta.label)}</a>` : ''}
+      ${ctaLink ? (magneticCta ? `<span class="magnetic">${ctaLink}</span>` : ctaLink) : ''}
     </nav>
   </div>
 </header>`;

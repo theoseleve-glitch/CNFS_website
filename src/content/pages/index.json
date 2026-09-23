@@ -2,6 +2,43 @@
   "path": "index.html",
   "title": "CNFS - Centrale Nantes Formula Student",
   "preloader": true,
+  "magneticCta": true,
+  "globalsOverride": {
+    "footer": {
+      "brandDesc": "Centrale Nantes Formula Student — Préparer l'avenir.",
+      "columns": [
+        {
+          "heading": "Navigation",
+          "links": [
+            { "label": "Home", "href": "index.html" },
+            { "label": "About", "href": "about.html" },
+            { "label": "Formula Student", "href": "formula-student.html" },
+            { "label": "The Project", "href": "project.html" }
+          ]
+        },
+        {
+          "heading": "Get Involved",
+          "links": [
+            { "label": "Become a Partner", "href": "partners.html" },
+            { "label": "Contact", "href": "contact.html" }
+          ]
+        },
+        {
+          "heading": "Contact",
+          "links": [
+            { "label": "Centrale Nantes" },
+            { "label": "1 Rue de la Noe" },
+            { "label": "44300 Nantes, France" },
+            { "label": "contact@cnfs.racing", "href": "mailto:contact@cnfs.racing" }
+          ]
+        }
+      ],
+      "bottom": {
+        "copyright": "&copy; 2026 Centrale Nantes Formula Student",
+        "credit": "<a href=\"https://www.ec-nantes.fr\" class=\"site-footer__link\" target=\"_blank\" rel=\"noopener\">Centrale Nantes</a>"
+      }
+    }
+  },
   "meta": {
     "description": "Centrale Nantes Formula Student - Préparer l'avenir. 20 students, one race car, built from scratch.",
     "themeColor": "#0A0C10",
@@ -19,19 +56,7 @@
     "preload": ["assets/images/event-formula-student-france.jpg"],
     "stylesheets": ["css/style.css", "css/awwwards.css"],
     "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
-    "jsonLd": {
-      "@context": "https://schema.org",
-      "@type": "SportsTeam",
-      "name": "Centrale Nantes Formula Student",
-      "alternateName": "CNFS",
-      "url": "https://cnfs.racing",
-      "sport": "Formula Student",
-      "memberOf": { "@type": "CollegeOrUniversity", "name": "Centrale Nantes", "url": "https://www.ec-nantes.fr" },
-      "address": { "@type": "PostalAddress", "streetAddress": "1 Rue de la Noe", "addressLocality": "Nantes", "postalCode": "44300", "addressCountry": "FR" },
-      "email": "contact@cnfs.racing",
-      "telephone": "+33783990278",
-      "foundingDate": "2025-12"
-    },
+    "jsonLd": "\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"SportsTeam\",\n    \"name\": \"Centrale Nantes Formula Student\",\n    \"alternateName\": \"CNFS\",\n    \"url\": \"https://cnfs.racing\",\n    \"sport\": \"Formula Student\",\n    \"memberOf\": { \"@type\": \"CollegeOrUniversity\", \"name\": \"Centrale Nantes\", \"url\": \"https://www.ec-nantes.fr\" },\n    \"address\": { \"@type\": \"PostalAddress\", \"streetAddress\": \"1 Rue de la Noe\", \"addressLocality\": \"Nantes\", \"postalCode\": \"44300\", \"addressCountry\": \"FR\" },\n    \"email\": \"contact@cnfs.racing\",\n    \"telephone\": \"+33783990278\",\n    \"foundingDate\": \"2025-12\"\n  }\n  ",
     "noscript": true
   },
   "scripts": [

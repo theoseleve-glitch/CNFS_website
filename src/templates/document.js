@@ -65,8 +65,14 @@ export function renderDocument({ page, globals, theme, body }) {
   // raw() inside an attribute is an injection point for anything not pre-validated.
   const fontLink = h.fontHref ? `<link href="${raw(h.fontHref)}" rel="stylesheet">` : '';
 
+  // The source hand-formats this block (indented, spaced JSON); JSON.stringify()
+  // would minify it. The golden comparison normalises whitespace *runs* but does
+  // not insert whitespace where the source has some and a minified re-serialisation
+  // has none (e.g. `"key": "value"` vs `"key":"value"`), so re-serialising here
+  // does not achieve byte parity. h.jsonLd is therefore stored as the verbatim
+  // source string (not an object) and reproduced with raw(), not JSON.stringify().
   const jsonLd = h.jsonLd
-    ? `<script type="application/ld+json">${raw(JSON.stringify(h.jsonLd))}</script>`
+    ? `<script type="application/ld+json">${raw(h.jsonLd)}</script>`
     : '';
 
   // The preloader overlay and grain texture div sit immediately inside
