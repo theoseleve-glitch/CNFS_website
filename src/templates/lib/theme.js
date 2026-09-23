@@ -1,6 +1,5 @@
 // Theme token renderer. No Node built-ins: this module is imported by the
 // Cloudflare Workers runtime in Phase 2.
-import { esc } from './html.js';
 
 // Maps the editable token names to the CSS custom properties already defined
 // in src/css/style.css. Only tokens listed here can be overridden.
@@ -27,17 +26,25 @@ const TOKEN_MAP = {
   }
 };
 
-// Allow-list validation, per token group, BEFORE esc() ever sees the value.
-// esc() only escapes `& < > " '` — it does NOT escape `;`, `}`, `(` or `)`,
-// which are exactly the characters that matter inside a <style> block. A
-// stored value like `red;}body{display:none}` would close the :root rule
-// early and inject arbitrary sibling CSS (site defacement, exfiltration via
-// attribute selectors / url()). It can't reach <script> or break out of
-// <style> — those chars ARE escaped — so this is CSS injection, not XSS, but
-// it's real. The project spec requires sanitisation on write AND escaping on
-// render ("both, not either"): this render layer must be safe standing
-// alone, so anything that doesn't match its group's shape is DROPPED rather
-// than patched up. Do not remove this allow-list to "simplify" the renderer.
+// Allow-list validation, per token group. Validated values are emitted RAW
+// into the <style> block below — NOT passed through esc(). `<style>` is an
+// HTML raw-text element: character references are not decoded inside it, so
+// esc()-ing a value (e.g. turning `'` into `&#39;`) does not produce an
+// equivalent CSS token — it corrupts it. `&#39;Bebas Neue&#39;` reaches the
+// CSS parser as those six literal characters, the font-family value becomes
+// invalid, and the browser silently falls back to a default font. HTML
+// escaping is the wrong tool in a CSS context, one layer down from the
+// original bug (unescaped `;`/`}` allowing a value like
+// `red;}body{display:none}` to close the :root rule early and inject
+// sibling CSS).
+//
+// Because nothing here is escaped, the allow-lists below are the ONLY
+// defence and must remain exhaustive: colours are hex/rgb/hsl/keyword,
+// fonts are letters/digits/spaces/`-`/`_`/`,`/`.`/`'`/`"`, and scale is
+// number-plus-unit. None of these can form `<` or `>`, so none can close the
+// enclosing `<style>` tag or open a new element. Do not widen any of these
+// patterns to admit `<` or `>` without reintroducing an escaping strategy
+// that is actually safe in a raw-text CSS context.
 const HEX_COLOR = /^#[0-9a-fA-F]{3}$|^#[0-9a-fA-F]{4}$|^#[0-9a-fA-F]{6}$|^#[0-9a-fA-F]{8}$/;
 const FUNC_COLOR = /^(?:rgb|rgba|hsl|hsla)\([\d.,\s%/]+\)$/i;
 const KEYWORD_COLOR = /^[a-zA-Z]+$/;
@@ -63,7 +70,7 @@ export function renderThemeVars(theme) {
       if (value === undefined || value === null || value === '') continue;
       const str = String(value);
       if (!isValid(str)) continue;
-      decls.push(`${cssVar}:${esc(str)}`);
+      decls.push(`${cssVar}:${str}`);
     }
   }
 

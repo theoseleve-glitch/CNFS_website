@@ -56,7 +56,7 @@ test('renders valid values for each token group', () => {
     }
   });
   assert.ok(out.includes('--color-primary:#FF0000'));
-  assert.ok(out.includes('--font-heading:&#39;Bebas Neue&#39;, &#39;Arial Narrow&#39;, sans-serif'));
+  assert.ok(out.includes("--font-heading:'Bebas Neue', 'Arial Narrow', sans-serif"));
   assert.ok(out.includes('--border-radius:12px'));
 });
 
@@ -65,4 +65,11 @@ test('emits only the valid declaration when one override in a mix is invalid', (
     overrides: { colors: { primary: '#FF0000', secondary: 'red;}body{display:none}' } }
   });
   assert.equal(out, '<style id="cnfs-theme">:root{--color-primary:#FF0000}</style>');
+});
+
+test('INVARIANT: values are emitted raw, so no allow-list may admit < or >', () => {
+  const out = renderThemeVars({ overrides: { colors: { primary: '</style><script>alert(1)</script>' } } });
+  assert.equal(out, '');
+  assert.ok(!out.includes('<script'));
+  assert.ok(!out.includes('</style><'));
 });
