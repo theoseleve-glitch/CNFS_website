@@ -35,3 +35,18 @@ test('renders one list item per nav entry', () => {
   const html = renderHeader({ globals, currentPath: 'about.html' });
   assert.equal(html.match(/<li>/g).length, 3);
 });
+
+test('SECURITY: attribute values cannot break out of their quotes', () => {
+  const payload = '" onmouseover="alert(1)';
+  const hostile = {
+    brand: { name: payload, tagline: 'tag', logo: payload },
+    nav: [{ label: 'Home', href: payload }],
+    navCta: { label: 'CTA', href: payload }
+  };
+  const html = renderHeader({ globals: hostile, currentPath: 'x.html' });
+  // A live, injected attribute would appear as this literal (real-quote) substring.
+  assert.ok(!html.includes('onmouseover="alert(1)"'));
+  // The escaped form must be present — proves the quote was actually neutralised,
+  // not merely absent because the field went unrendered.
+  assert.ok(html.includes('&quot; onmouseover=&quot;alert(1)'));
+});

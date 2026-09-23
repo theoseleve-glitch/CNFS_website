@@ -47,6 +47,22 @@ test('renders a span, not a link, for a column entry with no href', () => {
   assert.ok(html.includes('<span class="site-footer__link">Centrale Nantes</span>'));
 });
 
+test('SECURITY: attribute values cannot break out of their quotes', () => {
+  const payload = '" onmouseover="alert(1)';
+  const hostile = {
+    brand: { name: 'CNFS' },
+    footer: {
+      brandDesc: 'desc',
+      columns: [{ heading: 'Nav', links: [{ label: 'Evil', href: payload }] }],
+      bottom: { copyright: '&copy;', credit: 'credit' }
+    },
+    social: [{ platform: payload, href: payload, glyph: 'x' }]
+  };
+  const html = renderFooter({ globals: hostile });
+  assert.ok(!html.includes('onmouseover="alert(1)"'));
+  assert.ok(html.includes('&quot; onmouseover=&quot;alert(1)'));
+});
+
 test('renders the real footer from globals.json byte-identically', () => {
   const real = JSON.parse(readFileSync(new URL('../src/content/globals.json', import.meta.url), 'utf8'));
   const page = readFileSync(new URL('../src/about.html', import.meta.url), 'utf8');

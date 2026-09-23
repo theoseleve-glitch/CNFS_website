@@ -7,7 +7,7 @@
 // across the pages checked is hardcoded below as a constant; everything that
 // differs (including whether a block appears at all) is read from `page`.
 
-import { esc, attr, raw, each } from './lib/html.js';
+import { esc, attr, attrEsc, raw, each } from './lib/html.js';
 import { renderThemeVars } from './lib/theme.js';
 
 export function renderDocument({ page, globals, theme, body }) {
@@ -17,13 +17,13 @@ export function renderDocument({ page, globals, theme, body }) {
   // theme-color and the favicon fill are independent values in the source
   // (they coincide on index.html and 404.html, but diverge on every other
   // page), so each has its own field — never derive one from the other.
-  const robots = m.robots ? `<meta name="robots" content="${esc(m.robots)}">` : '';
+  const robots = m.robots ? `<meta name="robots" content="${attrEsc(m.robots)}">` : '';
 
-  const hreflang = each(h.hreflang, (l) => `<link rel="alternate" hreflang="${esc(l.lang)}" href="${esc(l.href)}">`);
+  const hreflang = each(h.hreflang, (l) => `<link rel="alternate" hreflang="${attrEsc(l.lang)}" href="${attrEsc(l.href)}">`);
 
-  const canonical = page.path ? `<link rel="canonical" href="${esc(page.path)}">` : '';
+  const canonical = page.path ? `<link rel="canonical" href="${attrEsc(page.path)}">` : '';
 
-  const description = m.description ? `<meta name="description" content="${esc(m.description)}">` : '';
+  const description = m.description ? `<meta name="description" content="${attrEsc(m.description)}">` : '';
 
   const noscript = h.noscript
     ? `<noscript><style>
@@ -34,13 +34,18 @@ export function renderDocument({ page, globals, theme, body }) {
 
   const og = m.ogTitle
     ? `\n  <!-- Open Graph -->\n  <meta property="og:type" content="website">` +
-      `<meta property="og:title" content="${esc(m.ogTitle)}">` +
-      `<meta property="og:description" content="${esc(m.ogDescription)}">` +
-      `<meta property="og:image" content="${esc(m.ogImage)}">` +
-      `<meta property="og:site_name" content="${esc(m.ogSiteName)}">`
+      `<meta property="og:title" content="${attrEsc(m.ogTitle)}">` +
+      `<meta property="og:description" content="${attrEsc(m.ogDescription)}">` +
+      `<meta property="og:image" content="${attrEsc(m.ogImage)}">` +
+      `<meta property="og:site_name" content="${attrEsc(m.ogSiteName)}">`
     : '';
 
-  const faviconFill = m.faviconFill ? esc(m.faviconFill).replace('#', '%23') : '';
+  // faviconFill is nested inside the outer href="..." attribute of the <link> below
+  // (the %22s are percent-encoded quotes for the inline SVG's own attributes, not
+  // HTML attribute delimiters — the HTML parser only sees the real double quotes
+  // that open and close href). A literal '"' in faviconFill would still break out
+  // of that outer href attribute, so it goes through attrEsc(), not esc().
+  const faviconFill = m.faviconFill ? attrEsc(m.faviconFill).replace('#', '%23') : '';
   const favicon = faviconFill
     ? `<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22>` +
       `<rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22${faviconFill}%22/>` +
@@ -48,6 +53,17 @@ export function renderDocument({ page, globals, theme, body }) {
     : '';
 
   const fontsComment = h.preload && h.preload.length ? '\n  <!-- Fonts: Syne (display) + Outfit (body) + Space Mono (accents) -->' : '';
+
+  // EXCEPTION to "every content-derived attribute uses attrEsc()": h.fontHref is a
+  // structural constant reproduced verbatim from the source (the Google Fonts URL),
+  // not free-form editable content, and it is the only attribute value anywhere in
+  // the 9 source pages that carries a raw, unescaped '&' (family=X&family=Y&...).
+  // No attribute in the source ever uses '&amp;'. attrEsc() escapes '&' to '&amp;',
+  // which would break byte parity against every page. raw() reproduces it exactly.
+  // If this field ever becomes user-editable, it MUST be validated as a well-formed
+  // URL on write (e.g. an allowlisted host, no quote/angle-bracket characters) —
+  // raw() inside an attribute is an injection point for anything not pre-validated.
+  const fontLink = h.fontHref ? `<link href="${raw(h.fontHref)}" rel="stylesheet">` : '';
 
   const jsonLd = h.jsonLd
     ? `<script type="application/ld+json">${raw(JSON.stringify(h.jsonLd))}</script>`
@@ -58,7 +74,7 @@ export function renderDocument({ page, globals, theme, body }) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  ${m.themeColor ? `<meta name="theme-color" content="${esc(m.themeColor)}">` : ''}
+  ${m.themeColor ? `<meta name="theme-color" content="${attrEsc(m.themeColor)}">` : ''}
   ${robots}
   ${hreflang}
   ${canonical}
@@ -67,13 +83,13 @@ export function renderDocument({ page, globals, theme, body }) {
   ${favicon}
 ${og}
 ${fontsComment}
-  ${each(h.preload, (src) => `<link rel="preload" as="image" href="${esc(src)}">`)}
+  ${each(h.preload, (src) => `<link rel="preload" as="image" href="${attrEsc(src)}">`)}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  ${h.fontHref ? `<link href="${esc(h.fontHref)}" rel="stylesheet">` : ''}
+  ${fontLink}
 
   <!-- Styles -->
-  ${each(h.stylesheets, (href) => `<link rel="stylesheet" href="${esc(href)}">`)}
+  ${each(h.stylesheets, (href) => `<link rel="stylesheet" href="${attrEsc(href)}">`)}
 
   ${jsonLd}
   ${renderThemeVars(theme)}
@@ -82,7 +98,7 @@ ${fontsComment}
 </head>
 <body${attr('class', page.bodyClass)}>
 ${body}
-${each(page.scripts, (src) => `<script src="${esc(src)}"></script>`)}
+${each(page.scripts, (src) => `<script src="${attrEsc(src)}"></script>`)}
 </body>
 </html>`;
 }

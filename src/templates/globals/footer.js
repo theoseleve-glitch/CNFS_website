@@ -1,4 +1,4 @@
-import { esc, raw, each } from '../lib/html.js';
+import { esc, attrEsc, raw, each } from '../lib/html.js';
 
 export function renderFooter({ globals }) {
   const f = globals.footer || {};
@@ -10,8 +10,8 @@ export function renderFooter({ globals }) {
         <p class="site-footer__brand-desc">${esc(f.brandDesc)}</p>
         <div class="social-links">
           ${each(globals.social, (s) => s.href
-            ? `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="social-link" aria-label="${esc(s.platform)}">${raw(s.glyph)}</a>`
-            : `<a href="#" role="link" aria-disabled="true" class="social-link" aria-label="${esc(s.platform)}">${raw(s.glyph)}</a>`
+            ? `<a href="${attrEsc(s.href)}" target="_blank" rel="noopener" class="social-link" aria-label="${attrEsc(s.platform)}">${raw(s.glyph)}</a>`
+            : `<a href="#" role="link" aria-disabled="true" class="social-link" aria-label="${attrEsc(s.platform)}">${raw(s.glyph)}</a>`
           )}
         </div>
       </div>
@@ -19,7 +19,7 @@ export function renderFooter({ globals }) {
         <h4 class="site-footer__heading">${esc(col.heading)}</h4>
         <ul class="site-footer__links">
           ${each(col.links, (l) => l.href
-            ? `<li><a href="${esc(l.href)}" class="site-footer__link">${esc(l.label)}</a></li>`
+            ? `<li><a href="${attrEsc(l.href)}" class="site-footer__link">${esc(l.label)}</a></li>`
             : `<li><span class="site-footer__link">${esc(l.label)}</span></li>`
           )}
         </ul>

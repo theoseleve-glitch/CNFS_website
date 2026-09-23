@@ -97,6 +97,29 @@ test('omits the noscript block by default, renders it when head.noscript is true
   assert.ok(htmlWith.includes('.preloader { display: none !important; }'));
 });
 
+test('SECURITY: attribute values cannot break out of their quotes', () => {
+  const payload = '" onmouseover="alert(1)';
+  const hostile = {
+    path: payload,
+    title: 't',
+    meta: { description: payload, ogTitle: payload, ogImage: payload, ogDescription: 'd', ogSiteName: 's' },
+    head: {}
+  };
+  const html = renderDocument({ page: hostile, globals: {}, theme: {}, body: '' });
+  assert.ok(!html.includes('onmouseover="alert(1)"'));
+  assert.ok(html.includes('&quot; onmouseover=&quot;alert(1)'));
+});
+
+test('the Google Fonts href renders with a raw & and no &amp;', () => {
+  const withFont = {
+    ...page,
+    head: { ...page.head, fontHref: 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400&display=swap' }
+  };
+  const html = renderDocument({ page: withFont, globals: {}, theme: {}, body: '' });
+  assert.ok(html.includes('href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400&display=swap"'));
+  assert.ok(!html.includes('&amp;family='));
+});
+
 test('a 404-shaped page renders none of the full-page-only head elements', () => {
   const notFound = {
     title: 'Page Not Found - CNFS',
