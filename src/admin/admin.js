@@ -192,8 +192,19 @@ function fields(parent, obj, key, labelText) {
     input.className = 'field__input';
     if (long) input.rows = Math.min(8, Math.ceil(value.length / 60) + 1);
     input.value = value;
-    input.oninput = () => { obj[key] = input.value; markDirty(); };
+    input.oninput = () => { obj[key] = input.value; markDirty(); imageRow && imageRow.sync(); };
     field.append(input);
+
+    // Image fields get a thumbnail and an upload control. Detected from the
+    // field name or from the value looking like an image path, so it works for
+    // `image`, `logo`, `avatar`, `ogImage` and anything else without keeping a
+    // hand-maintained list of prop names.
+    let imageRow = null;
+    if (isImageField(key, value)) {
+      imageRow = buildImageRow(obj, key, input);
+      field.append(imageRow.node);
+    }
+
     parent.append(field);
     return;
   }
@@ -252,6 +263,89 @@ function fields(parent, obj, key, labelText) {
     for (const k of Object.keys(value).filter((k) => !k.startsWith('_'))) fields(group, value, k, label(k));
     parent.append(group);
   }
+}
+
+/* ---------------------------------------------------------------- images */
+
+const IMAGE_KEY = /(image|img|logo|avatar|photo|picture|thumb|banner|poster)/i;
+const IMAGE_PATH = /\.(jpe?g|png|webp|gif)(\?|$)/i;
+
+function isImageField(key, value) {
+  return IMAGE_KEY.test(String(key)) || IMAGE_PATH.test(String(value || ''));
+}
+
+// Resolves a stored value to something the browser can show. Stored paths are
+// relative to the site root ("assets/images/x.jpg"); uploads are absolute.
+function imageSrc(value) {
+  const v = String(value || '').trim();
+  if (!v) return '';
+  if (/^(https?:)?\/\//.test(v) || v.startsWith('/')) return v;
+  return '/' + v.replace(/^\.\//, '');
+}
+
+function buildImageRow(obj, key, input) {
+  const node = el('div', 'imgrow');
+  const thumb = document.createElement('img');
+  thumb.className = 'imgrow__thumb';
+  thumb.alt = '';
+  thumb.loading = 'lazy';
+
+  const status = el('span', 'imgrow__status');
+
+  const file = document.createElement('input');
+  file.type = 'file';
+  file.accept = 'image/jpeg,image/png,image/webp,image/gif';
+  file.className = 'imgrow__file';
+
+  const pick = btn('Upload image…', 'btn--sm', () => file.click());
+
+  const sync = () => {
+    const src = imageSrc(obj[key]);
+    if (src) { thumb.src = src; thumb.hidden = false; } else { thumb.hidden = true; }
+  };
+
+  file.onchange = async () => {
+    const f = file.files && file.files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) {
+      status.textContent = `${(f.size / 1048576).toFixed(1)}MB — the limit is 5MB`;
+      status.className = 'imgrow__status is-error';
+      return;
+    }
+    pick.disabled = true;
+    status.className = 'imgrow__status';
+    status.textContent = 'Uploading…';
+    try {
+      // Raw bytes with the file's own content type; the server verifies the
+      // magic number rather than trusting this header.
+      const res = await fetch('/api/images', {
+        method: 'POST',
+        headers: { 'Content-Type': f.type, 'X-CNFS-Admin': '1' },
+        body: f
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        status.textContent = data.error || 'Upload failed';
+        status.className = 'imgrow__status is-error';
+      } else {
+        obj[key] = data.url;
+        input.value = data.url;
+        sync();
+        markDirty();
+        status.textContent = `Uploaded (${Math.round((data.bytes || 0) / 1024)} KB) — remember to publish`;
+        status.className = 'imgrow__status is-ok';
+      }
+    } catch {
+      status.textContent = 'Network error — nothing was uploaded';
+      status.className = 'imgrow__status is-error';
+    }
+    pick.disabled = false;
+    file.value = '';
+  };
+
+  node.append(thumb, pick, status, file);
+  sync();
+  return { node, sync };
 }
 
 /* ----------------------------------------------------------- design panel */

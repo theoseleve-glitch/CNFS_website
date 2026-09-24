@@ -135,3 +135,14 @@ body.auth { display: grid; place-items: center; background: var(--ink); }
   .layout { grid-template-columns: 1fr; height: auto; }
   .panel--preview { height: 70vh; }
 }
+
+/* ------------------------------------------------------------- images */
+.imgrow { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.imgrow__thumb {
+  width: 64px; height: 44px; object-fit: cover; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--bg); display: block;
+}
+.imgrow__file { display: none; }
+.imgrow__status { font-size: 12px; color: var(--ink-2); }
+.imgrow__status.is-ok { color: var(--ok); }
+.imgrow__status.is-error { color: var(--error); }
