@@ -1,0 +1,7 @@
+# Deliberately declares NO routes: the `cnfs` Worker's existing triggers
+# (cnfs.racing and one other) are left exactly as they are. Declaring them here
+# would risk dropping the one this config does not know about.
+name = "cnfs"
+main = "proxy.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
