@@ -1,0 +1,120 @@
+{
+  "path": "contact.html",
+  "title": "Contact - CNFS",
+  "meta": {
+    "description": "Contact Centrale Nantes Formula Student - partnership inquiries, recruitment, press, and general questions.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "Contact - CNFS",
+    "ogDescription": "Get in touch with CNFS for partnerships, recruitment, or press inquiries.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "Contact" }
+        ],
+        "title": "Contact Us"
+      }
+    },
+    {
+      "type": "contact-grid",
+      "props": {
+        "_formScroll3d": "rotate-left",
+        "_infoScroll3d": "rotate-right",
+        "form": {
+          "label": "Send a Message",
+          "title": "Get in Touch",
+          "intro": "Whether you're interested in partnering with us, joining the team, or just want to learn more - we'd love to hear from you.",
+          "_action": "https://formsubmit.co/contact@cnfs.racing",
+          "_method": "POST",
+          "_hidden": [
+            { "name": "_subject", "value": "New message from cnfs.racing" },
+            { "name": "_next", "value": "https://cnfs.racing/contact.html?sent=true" },
+            { "name": "_captcha", "value": "true" }
+          ],
+          "_honeypot": { "name": "_honey" },
+          "rows": [
+            [
+              { "id": "first-name", "name": "first_name", "label": "First Name *", "type": "text", "required": true, "placeholder": "Your first name", "autocomplete": "given-name" },
+              { "id": "last-name", "name": "last_name", "label": "Last Name *", "type": "text", "required": true, "placeholder": "Your last name", "autocomplete": "family-name" }
+            ],
+            [
+              { "id": "email", "name": "email", "label": "Email *", "type": "email", "required": true, "placeholder": "your@email.com", "autocomplete": "email" },
+              { "id": "company", "name": "company", "label": "Company / Organization", "type": "text", "placeholder": "Your company name", "autocomplete": "organization" }
+            ],
+            [
+              {
+                "id": "subject",
+                "name": "subject",
+                "label": "Subject *",
+                "type": "select",
+                "required": true,
+                "placeholderOption": { "value": "", "label": "Select a subject" },
+                "options": [
+                  { "value": "partnership", "label": "Partnership Inquiry" },
+                  { "value": "recruitment", "label": "Join the Team" },
+                  { "value": "press", "label": "Press / Media" },
+                  { "value": "general", "label": "General Question" }
+                ]
+              }
+            ],
+            [
+              { "id": "message", "name": "message", "label": "Message *", "type": "textarea", "required": true, "placeholder": "Tell us how we can help..." }
+            ]
+          ],
+          "submitLabel": "Send Message"
+        },
+        "info": {
+          "label": "Contact Information",
+          "title": "Reach Us Directly",
+          "items": [
+            { "icon": "&#9993;", "label": "Email", "value": "contact@cnfs.racing" },
+            { "icon": "&#9742;", "label": "Phone (President)", "value": "+33 7 83 99 02 78" },
+            { "icon": "&#9962;", "label": "Address", "value": ["Centrale Nantes", "1 Rue de la Noe", "44300 Nantes, France"] }
+          ],
+          "socialHeading": "Follow Us",
+          "social": [
+            { "platform": "Instagram", "href": "https://www.instagram.com/cnfsracingteam/", "glyph": "&#128247;" },
+            { "platform": "LinkedIn", "href": "https://www.linkedin.com/company/centralenantesfs/", "glyph": "in" },
+            { "platform": "Facebook", "glyph": "f" },
+            { "platform": "YouTube", "glyph": "&#9654;" }
+          ],
+          "map": { "caption": "Map - Centrale Nantes" }
+        }
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "threeD": true,
+        "title": "Ready to Support CNFS?",
+        "text": "Download our partnership brochure or schedule a meeting with our corporate relations team.",
+        "actions": [
+          { "label": "Become a Partner", "href": "partners.html", "style": "primary" },
+          { "label": "Download Brochure (Coming Soon)", "style": "outline" }
+        ]
+      }
+    }
+  ]
+}

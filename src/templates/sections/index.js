@@ -18,6 +18,7 @@ import { renderAboutPreview } from './about-preview.js';
 import { renderCarPinned } from './car-pinned.js';
 import { renderCardGrid } from './card-grid.js';
 import { renderCardsSection } from './cards-section.js';
+import { renderContactGrid } from './contact-grid.js';
 import { renderContentCardSplit } from './content-card-split.js';
 import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
@@ -25,6 +26,7 @@ import { renderDeptGrid } from './dept-grid.js';
 import { renderEventsList } from './events-list.js';
 import { renderFsEvents } from './fs-events.js';
 import { renderHeroAw } from './hero-aw.js';
+import { renderMapPlaceholder } from './map-placeholder.js';
 import { renderMarquee } from './marquee.js';
 import { renderNewsGrid } from './news-grid.js';
 import { renderOrgChart } from './org-chart.js';
@@ -45,6 +47,7 @@ export const SECTIONS = {
   'car-pinned': renderCarPinned,
   'card-grid': renderCardGrid,
   'cards-section': renderCardsSection,
+  'contact-grid': renderContactGrid,
   'content-card-split': renderContentCardSplit,
   'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
@@ -52,6 +55,7 @@ export const SECTIONS = {
   'events-list': renderEventsList,
   'fs-events': renderFsEvents,
   'hero-aw': renderHeroAw,
+  'map-placeholder': renderMapPlaceholder,
   'marquee': renderMarquee,
   'news-grid': renderNewsGrid,
   'org-chart': renderOrgChart,
