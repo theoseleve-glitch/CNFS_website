@@ -20,6 +20,15 @@ test('IDEMPOTENCE: esc leaves an already-valid character reference unchanged, ne
   assert.equal(esc('&#x1F600;'), '&#x1F600;');
 });
 
+test('ENTITY ICONS: entity-only fields survive esc() unchanged', () => {
+  // Fields whose entire value is a single character reference (e.g.
+  // about-preview's `list.icon`, sponsor-grid's `placeholderIcon`) never
+  // need raw() — esc() already reproduces them byte-for-byte, so raw()
+  // there would only open an injection point for no benefit.
+  assert.equal(esc('&#10003;'), '&#10003;');
+  assert.equal(esc('&#9733;'), '&#9733;');
+});
+
 test('esc escapes a letter-run that looks like a reference but never completes with a ;', () => {
   // 'AT&T & Sons': the first '&' is followed by a letter ('T') but the run
   // is never terminated by ';' anywhere, so it is not actually a reference

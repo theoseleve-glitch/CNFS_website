@@ -34,6 +34,15 @@ test('RICH TEXT: about-preview body is intentionally raw and must be sanitised o
   assert.ok(!html.includes('&lt;strong&gt;'));
 });
 
+test('RICH TEXT: about-preview list items are intentionally raw', () => {
+  const html = renderSection({
+    type: 'about-preview',
+    props: { title: 'T', list: { icon: '&#10003;', items: ['<strong>x</strong>'] } }
+  });
+  assert.ok(html.includes('<strong>x</strong>'));
+  assert.ok(!html.includes('&lt;strong&gt;'));
+});
+
 test('cta-section omits the button group when there are no actions', () => {
   const html = renderSection({ type: 'cta-section', props: { title: 'T', text: 'x' } });
   assert.ok(!html.includes('btn-group'));

@@ -18,13 +18,16 @@
 // by every `<li>` (the source repeats the same "&#10003;" glyph five times;
 // storing it once avoids Ruling 4's redundant state — a future instance
 // wanting per-item icons is a genuine markup difference, not this shape).
-// `list.items` follows the same RICH TEXT precedent as `body` below: each
-// item's text carries a genuine `<strong>` lead-in (e.g. "<strong>Brand
-// visibility</strong> on the car, ..."), so items go through raw(), not
-// esc(), for the same reason and under the same sanitise-on-write
-// obligation documented on renderBody(). Omitted entirely when absent, so
-// every pre-existing caller renders byte-identically to before. No Node
-// built-ins: this module is imported by the Cloudflare Workers runtime.
+// `list.icon` is rendered with esc(), NOT raw(): "&#10003;" is a complete,
+// valid character reference and nothing else, so RULING 24's entity-aware
+// esc() reproduces it unchanged — raw() would buy nothing here and would
+// needlessly open an injection point on a field that is, and only ever
+// needs to be, an entity (fix-round-1 correction: this shipped as raw() in
+// the first pass and was caught in review). `list.items` is a genuinely
+// different case — see the RICH TEXT FIELD comment on renderList() below.
+// Omitted entirely when absent, so every pre-existing caller renders
+// byte-identically to before. No Node built-ins: this module is imported by
+// the Cloudflare Workers runtime.
 
 import { esc, attrEsc, raw, cls, each } from '../lib/html.js';
 
@@ -51,13 +54,23 @@ function renderActions(actions) {
   return each(actions, (a) => `<a href="${attrEsc(a.href)}" class="btn btn--${attrEsc(a.style)}">${esc(a.label)}</a>`);
 }
 
-// See the `list` note at the top of this file: a single shared icon plus
-// per-item rich text, same raw() precedent as renderBody() above.
+// RICH TEXT FIELD: `list.items[]` is deliberately rendered with raw(), not
+// esc(). WHY: the source's benefit list carries inline markup — e.g.
+// src/partners.html has "<strong>Brand visibility</strong> on the car, team
+// uniforms, website, and social media". esc() would turn that tag into
+// visible "&lt;strong&gt;" text and break byte parity with the source.
+// RISK: this makes `list.items` an injection point the moment it becomes
+// CMS-editable — raw() performs no sanitisation at all. A later phase MUST
+// sanitise `list.items` ON WRITE, server-side, against the whitelist
+// b, i, em, strong, br, a[href] (project spec section 8) before accepting
+// any external input; render-time escaping is not a substitute for that.
+// `list.icon`, by contrast, stays on esc() (see the top-of-file note) —
+// it is an entity, not rich text, and the two must not be conflated.
 function renderList(list) {
   if (!list || !list.items || list.items.length === 0) return '';
   return `<ul class="about-preview__list">
       ${each(list.items, (item) => `<li class="about-preview__list-item">
-        <span class="about-preview__list-icon">${raw(list.icon)}</span>
+        <span class="about-preview__list-icon">${esc(list.icon)}</span>
         <span>${raw(item)}</span>
       </li>`)}
     </ul>`;
