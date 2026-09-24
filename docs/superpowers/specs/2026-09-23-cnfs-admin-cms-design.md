@@ -350,3 +350,135 @@ now. Planning begins with Phase 1.
 4. **Shared publish rights.** Anyone holding a password changes the public site with no
    review. Per-user accounts plus history and revert are the mitigations available
    given the chosen auth model.
+
+## 14. Phase 1 outcomes
+
+Phase 1 is complete: all 9 source pages (`index`, `about`, `formula-student`, `project`,
+`partners`, `events`, `news`, `contact`, `404`) render from `src/content/pages/*.json`
+through `src/templates/**` with a byte-identical (whitespace-normalised) golden-file
+match, gated by `npm run test:golden` (`tests/golden-all.test.js`, one test per page plus
+a coverage assertion pinning the list at 9) and the full `npm test` (102 tests, zero
+dependencies). This section records what extraction turned up, for Phase 2 to plan from.
+
+### 14.1 Section types and their prop shapes
+
+28 section render functions, registered in `src/templates/sections/index.js` and
+dispatched by `renderSection(section, ctx)` on `section.type`. Every prop not listed as
+internal (§14.2) is ordinary CMS content.
+
+| Type | Source page(s) | Prop shape (non-internal) |
+|---|---|---|
+| `about-parallax` | index | `label`, `heading` (string\|string[]), `lead`, `body[]` (raw), `image{src,alt}`, `accent`, `actions[]{href,label}` |
+| `about-preview` | about, index, partners | `background`, `label`, `title`, `lead`, `body[]` (raw), `reversed`, `image{src,alt}`, `accent`, `actions[]`, `list{icon,items[]}` (items raw) |
+| `car-pinned` | index | `specs[]{value,unit,label}`, `activeIndex` |
+| `card-grid` | about, events, formula-student, news, project | `background`, `label`, `title`, `intro`, `cards[]{icon(raw),title,subtitle,text,link{href,label}}`, `cardsCentered`, `iconLarge` |
+| `cards-section` | index | `label`, `heading`, `lead`, `cards[]{icon(raw),title,text}`, `cta{href,label}` |
+| `contact-grid` | contact | `form{label,title,intro,rows[][]{id,name,type,label,required,placeholder,autocomplete,options[],placeholderOption},submitLabel}`, `info{label,title,items[]{icon,label,value},socialHeading,social[]{platform,href,glyph},map{caption}}` |
+| `content-card-split` | partners | `label`, `title`, `body[]`, `cards[]{title,text}` |
+| `cta-banner` | index | `heading` (string\|string[]), `text`, `actions[]{href,label,style}` |
+| `cta-section` | about, contact, project | `title`, `text`, `threeD`, `actions[]{href,label,style}` (no `href` renders the `aria-disabled` placeholder) |
+| `dept-grid` | about | `eyebrow`, `title`, `intro`, `depts[]{title,text}` (no `icon` field — no source instance has one) |
+| `error-404` | 404 | `title`, `text`, `actions[]{href,label,style}` |
+| `events-list` | events | `label`, `title`, `intro`, `events[]{date{month,day,year},badge{type,label},title,location,text}` |
+| `fs-events` | formula-student | `label`, `title`, `intro`, `events[]{number,title,text}` |
+| `hero-aw` | index | `titleLines[]{text,emphasis}`, `subtitle`, `actions[]` |
+| `map-placeholder` | contact | `caption` |
+| `marquee` | index | `items[]` (strings; loop-doubling and the `&bull;` separator are hardcoded) |
+| `news-grid` | news | `posts[]{image{src,alt},category,date,title,text}` |
+| `org-chart` | about | `eyebrow`, `title`, `intro`, `levels[][]{name,role}`, `advisor` (president badge is derived from position — first member of first level — not stored) |
+| `page-header` | all inner pages | `breadcrumb[]{href,label}`, `title` |
+| `s-intro` | index (helper, also standalone-registered) | `label`, `heading` (string\|string[]), `lead` |
+| `specs-grid` | about, project, formula-student | `background`, `label`, `intro`, `title`, `specs[]{value,unit,label}`, `outro` |
+| `sponsor-grid` | index, partners (helper, also standalone-registered) | `label`, `threeD`, `slots[]` (falsy = placeholder; placeholder icon via `placeholderGlyph` raw) |
+| `sponsors-section` | index, partners | `label`, `heading`, `lead`, `tiers[]{label,slots[]}`, `cta` |
+| `stats-aw` | index | `items[]{count,prefix,suffix,label}` |
+| `table-scroll` | project | `background`, `label`, `title`, `intro`, `rows[][]`, `total[]` (first column always `<strong>`, last column always `text-right`) |
+| `timeline` | index, project (helper, also standalone-registered) | `threeD`, `items[]{date,title,text}` |
+| `timeline-roadmap` | project | `label`, `title`, `timelineItems[]`, `cards[]{icon(raw),stacked,title,text}` |
+| `timeline-split` | index | `label`, `heading`, `lead`, `timelineItems[]`, `cards[]{icon(raw),stacked,title,text}` |
+
+Outside the section registry, `src/templates/document.js` (page shell: head, meta, favicon,
+theme vars) and `src/templates/globals/{header,footer}.js` (nav/footer chrome, driven by
+`globals.json`, with per-page override via `page.globalsOverride`, merged one level deep)
+round out the template surface. `page.js` composes skip-link + header + `<main>` of
+sections + footer + back-to-top from page-level flags (`skipLink`, `footer`, `backToTop`,
+`headerVariant`, `mainStyle`, `transparentHeader`, `magneticCta`, `preloader` — all
+default to the 8-page behaviour when omitted, so 404 is the only page setting them).
+
+### 14.2 Internal vs content props
+
+A prop name prefixed with `_` (Ruling 29) is internal bug-compatibility or structural
+plumbing, not content, and MUST be skipped by Phase 4's field-definition generator when
+building an editor form. Full list at end of Phase 1:
+
+- `card-grid` / `events-list`: `_brokenHeader` — carries the `data-scroll-3d` value for
+  the malformed wrapper tag (§14.3).
+- `contact-grid`: `_formScroll3d`, `_infoScroll3d` — the two-column version of the same
+  malformed wrapper; `form._action`, `form._method`, `form._hidden[]{name,value}`,
+  `form._honeypot{name}` — the Formsubmit.co endpoint wiring.
+
+The distinction exists because these values are either (a) reproducing a typo in the
+immutable source markup that a non-developer must never be invited to "fix" by hand
+(doing so would just change which typo ships), or (b) wiring for the site's only working
+inbound contact channel, where a well-meaning content edit (renaming the honeypot field,
+dropping a hidden input, editing the action URL) would silently break form delivery with
+no visible symptom on the rendered page. Every underscore-prefixed value is still escaped
+exactly like ordinary content (`attrEsc`/`esc`, Ruling 28) — "internal" describes who is
+allowed to edit it, not how much the render path trusts it.
+
+### 14.3 Markup that resisted structuring
+
+- **The malformed `<div " data-scroll-3d="...">` wrapper.** 10 occurrences across 5 pages
+  (contact ×2, events ×3 — one via `card-grid`'s `_brokenHeader`, two via `events-list`'s
+  `_brokenHeader`, formula-student ×1 via `card-grid`, partners ×2 hardcoded in
+  `content-card-split`, project ×2 hardcoded in `timeline-roadmap`) share one root cause:
+  a stray `"` immediately after `<div`, with no class attribute — evidently a leftover
+  from a removed class binding, never a real quoted attribute. Phase 1 treats it as
+  bug-compatibility (reproduce, don't repair): where the value varies per instance
+  (card-grid, events-list, contact-grid) it is an underscore-prefixed internal prop;
+  where it never varies within a component (timeline-roadmap, content-card-split, both
+  always `rotate-left`/`rotate-right`) it is hardcoded, not even a prop. **Phase 2 should
+  fix the typo at the source** (repair the malformed tag into a normal
+  `<div data-scroll-3d="...">`, or `<div class="..." data-scroll-3d="...">` if a class
+  was in fact intended) — once fixed, `_brokenHeader`, `_formScroll3d`, and
+  `_infoScroll3d` can be deleted and the golden tests updated to match the corrected
+  markup instead of the current byte-for-byte reproduction of the bug.
+- **GSAP-driven structural markup.** `hero-aw`'s per-line `<span class="line"><span
+  class="line-inner">` nesting, `marquee`'s doubled item list plus literal `&bull;`
+  separator, and `car-pinned`'s pinned-scroll wrapper/progress-dot markup all exist to
+  give GSAP ScrollTrigger something to animate. These are kept as fixed template
+  structure (hardcoded, not props) with only the underlying text/values exposed as
+  content — an editor can change the words but not restructure the animation DOM.
+- **The contact form's Formsubmit.co wiring** (§14.2) resisted structuring in the
+  opposite direction: it isn't presentation, it's the site's only live inbound channel,
+  so it had to become data (for the golden diff to reproduce it) while being fenced off
+  from the content surface entirely via the `_`-prefix convention.
+
+### 14.4 Fields rendered with `raw()` — write-side sanitisation required before Phase 3
+
+`raw()` performs no escaping; Ruling 3 caps it at exactly 14 call sites, all pre-existing
+(Phase 1 added none — `error-404` and `contact-grid` reproduce their instances without a
+new raw() exemption). Any of these fields that become CMS-editable in Phase 3/4 MUST be
+sanitised on write against an allowlist (spec §8) before that happens — today they are
+safe only because they are dev-authored, not user-submitted:
+
+| Site | Field |
+|---|---|
+| `document.js` | `head.fontHref` (Google Fonts URL, inside a `<link href>` attribute) |
+| `document.js` | `head.jsonLd` (verbatim JSON-LD script body) |
+| `globals/footer.js` (×2) | `social[].glyph` (linked and disabled-placeholder branches) |
+| `globals/footer.js` (×2) | `footer.bottom.copyright`, `footer.bottom.credit` |
+| `about-parallax.js` | `body[]` (rich-text paragraphs, carries inline `<strong>`) |
+| `about-preview.js` (×2) | `body[]` (rich-text paragraphs); `list.items[]` (rich-text list entries) |
+| `card-grid.js` | `cards[].icon` |
+| `cards-section.js` | `cards[].icon` |
+| `sponsor-grid.js` | placeholder-slot icon glyph |
+| `timeline-split.js` | `cards[].icon` |
+
+The two footer `bottom` fields and the icon/glyph fields are raw() because they carry
+complete HTML character references (`&copy;`, `&#9737;`) or (for `credit`) a literal
+inline `<a>` tag, not because they need arbitrary markup support — a narrower
+purpose-built escaper (decode-known-entities-only, or a single-anchor template) could
+replace `raw()` for those without loosening the surface. `about-parallax.body[]` and
+`about-preview.body[]`/`list.items[]` are the genuine rich-text fields and are the ones
+spec §8's write-side HTML sanitiser whitelist is actually for.
