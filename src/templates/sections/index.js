@@ -9,6 +9,7 @@ import { renderCardsSection } from './cards-section.js';
 import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
 import { renderDeptGrid } from './dept-grid.js';
+import { renderFsEvents } from './fs-events.js';
 import { renderHeroAw } from './hero-aw.js';
 import { renderMarquee } from './marquee.js';
 import { renderOrgChart } from './org-chart.js';
@@ -32,6 +33,7 @@ export const SECTIONS = {
   'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
   'dept-grid': renderDeptGrid,
+  'fs-events': renderFsEvents,
   'hero-aw': renderHeroAw,
   'marquee': renderMarquee,
   'org-chart': renderOrgChart,

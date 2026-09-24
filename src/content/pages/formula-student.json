@@ -1,0 +1,151 @@
+{
+  "path": "formula-student.html",
+  "title": "Formula Student - CNFS",
+  "meta": {
+    "description": "What is Formula Student? Learn about the world's largest engineering competition and how CNFS competes.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "Formula Student - CNFS",
+    "ogDescription": "The world's largest engineering competition. Learn how CNFS competes.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "Formula Student" }
+        ],
+        "title": "Formula Student"
+      }
+    },
+    {
+      "type": "about-preview",
+      "props": {
+        "eyebrow": "The Competition",
+        "title": "The World's Largest Engineering Competition",
+        "body": [
+          "Formula Student challenges university teams to design, build, and compete with a single-seat race car, judged across engineering, business, and performance criteria.",
+          "Founded in 1981 in the United States as Formula SAE, the competition has grown to include events on every continent. Each year, hundreds of university teams go head-to-head, proving their engineering prowess on and off the track.",
+          "The competition is not about building the fastest car - it's about building the best overall package. Teams must demonstrate excellence in engineering design, cost planning, business presentation, and on-track performance."
+        ],
+        "image": "assets/images/car-fs-prototype.jpg",
+        "imageAlt": "Formula Student competition",
+        "accent": true
+      }
+    },
+    {
+      "type": "card-grid",
+      "props": {
+        "label": "Judged Off-Track",
+        "title": "Static Events (325 Points)",
+        "intro": "Before hitting the track, teams present their engineering decisions, business plan, and cost analysis to industry judges.",
+        "background": "gray",
+        "cards": [
+          {
+            "icon": "&#128736;",
+            "title": "Engineering Design",
+            "subtitle": "150 Points",
+            "text": "Teams present and defend their technical design choices to a panel of experienced industry engineers. Judges evaluate innovation, engineering process, and understanding of vehicle dynamics."
+          },
+          {
+            "icon": "&#128176;",
+            "title": "Cost & Manufacturing",
+            "subtitle": "100 Points",
+            "text": "A detailed cost report covers every component. Teams demonstrate efficient manufacturing planning and show awareness of real-world production constraints and cost optimization."
+          },
+          {
+            "icon": "&#128188;",
+            "title": "Business Presentation",
+            "subtitle": "75 Points",
+            "text": "Teams pitch a business case to \"investors\" - presenting their car as a viable product. This tests communication, market analysis, and business strategy skills."
+          }
+        ]
+      }
+    },
+    {
+      "type": "fs-events",
+      "props": {
+        "label": "On-Track Performance",
+        "title": "Dynamic Events (675 Points)",
+        "intro": "The majority of points are earned on the track, testing every aspect of the car's performance.",
+        "events": [
+          { "number": 75, "title": "Acceleration", "text": "A straight-line sprint of 75 metres from a standing start. Tests raw engine power, traction, and launch strategy. Top teams complete it under 4 seconds." },
+          { "number": 50, "title": "Skidpad", "text": "A figure-eight course testing lateral grip and cornering ability. Cars must navigate constant-radius turns, revealing suspension setup and tyre performance." },
+          { "number": 150, "title": "Autocross", "text": "A single-lap time attack on a technical circuit with tight corners, slaloms, and straights. Tests overall car balance and driver skill. Sets the starting order for endurance." },
+          { "number": 300, "title": "Endurance", "text": "The ultimate test: 22 kilometres of racing with a mandatory driver change. Tests reliability, consistency, and thermal management under sustained load. Worth the most points." },
+          { "number": 100, "title": "Energy Efficiency", "text": "Measured during the endurance event, this rewards teams who achieve peak performance with minimal energy consumption. Engineering efficiency at its finest." }
+        ]
+      }
+    },
+    {
+      "type": "specs-grid",
+      "props": {
+        "label": "Total: 1000 Points",
+        "title": "Scoring Breakdown",
+        "background": "dark",
+        "specs": [
+          { "value": "325", "label": "Static Events" },
+          { "value": "675", "label": "Dynamic Events" },
+          { "value": "1000", "label": "Total Points" }
+        ],
+        "outro": "The best overall package wins. A car that excels in design and efficiency can beat a faster car that lacks engineering depth."
+      }
+    },
+    {
+      "type": "card-grid",
+      "props": {
+        "label": "Where We Compete",
+        "title": "Competition Calendar",
+        "brokenHeader": "tilt-up",
+        "cards": [
+          {
+            "icon": "&#127467;&#127479;",
+            "title": "Formula Student France (Transpolis)",
+            "text": "Our home competition, held annually at a circuit in France. This is our primary target for the 2025/2026 season. Teams from across Europe compete here."
+          },
+          {
+            "icon": "&#127465;&#127466;",
+            "title": "Formula Student Germany",
+            "text": "The largest and most prestigious FS event, held at Hockenheimring. A future goal as we grow and develop our car and team."
+          },
+          {
+            "icon": "&#127468;&#127463;",
+            "title": "Formula Student UK",
+            "text": "Held at Silverstone, one of the oldest and most respected events. An aspirational target for our second or third season."
+          }
+        ]
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "title": "Ready to Support Our Team?",
+        "text": "Help CNFS compete at the world's biggest engineering competition.",
+        "threeD": true,
+        "actions": [
+          { "label": "Become a Partner", "href": "partners.html", "style": "primary" },
+          { "label": "See Our Car", "href": "project.html", "style": "outline" }
+        ]
+      }
+    }
+  ]
+}
