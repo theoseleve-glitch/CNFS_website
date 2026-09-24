@@ -26,6 +26,7 @@ import { renderEventsList } from './events-list.js';
 import { renderFsEvents } from './fs-events.js';
 import { renderHeroAw } from './hero-aw.js';
 import { renderMarquee } from './marquee.js';
+import { renderNewsGrid } from './news-grid.js';
 import { renderOrgChart } from './org-chart.js';
 import { renderPageHeader } from './page-header.js';
 import { renderSIntro } from './s-intro.js';
@@ -52,6 +53,7 @@ export const SECTIONS = {
   'fs-events': renderFsEvents,
   'hero-aw': renderHeroAw,
   'marquee': renderMarquee,
+  'news-grid': renderNewsGrid,
   'org-chart': renderOrgChart,
   'page-header': renderPageHeader,
   's-intro': renderSIntro,

@@ -1,0 +1,132 @@
+{
+  "path": "news.html",
+  "title": "News - CNFS",
+  "meta": {
+    "description": "Latest news and updates from Centrale Nantes Formula Student. Follow our journey from design to competition.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "News - CNFS",
+    "ogDescription": "Latest news and updates from Centrale Nantes Formula Student.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "News" }
+        ],
+        "title": "News & Updates"
+      }
+    },
+    {
+      "type": "news-grid",
+      "props": {
+        "posts": [
+          {
+            "image": { "src": "assets/images/event-formula-student-france.jpg", "alt": "Team kickoff event" },
+            "category": "Team",
+            "date": "March 15, 2026",
+            "title": "Season 2025/2026: Official Project Kickoff",
+            "excerpt": "20 students gathered for the official launch of our inaugural Formula Student season. Departments are formed, goals are set, and the countdown to competition has begun."
+          },
+          {
+            "image": { "src": "assets/images/car-fs-prototype.jpg", "alt": "Design workshop" },
+            "category": "Engineering",
+            "date": "February 28, 2026",
+            "title": "Chassis Concept Design: Three Approaches Evaluated",
+            "excerpt": "Our chassis department has completed initial concept evaluation, comparing tubular steel, aluminium hybrid, and monocoque approaches based on weight, cost, and manufacturability."
+          },
+          {
+            "image": { "src": "assets/images/partnership-handshake.jpg", "alt": "Partnership meeting" },
+            "category": "Partnerships",
+            "date": "February 10, 2026",
+            "title": "Sponsorship Campaign Launches for 2025/2026",
+            "excerpt": "Our corporate relations team has kicked off the sponsorship drive, reaching out to local and national companies. We're looking for both financial and in-kind partners."
+          },
+          {
+            "image": { "src": "assets/images/motor-emrax-228.jpg", "alt": "Engine selection" },
+            "category": "Engineering",
+            "date": "January 20, 2026",
+            "title": "Motor Selection: EMRAX 228 Electric Motor Chosen",
+            "excerpt": "After evaluating multiple options, the powertrain department has selected a EMRAX 228 electric electric motor for our first car, balancing performance, reliability, and cost."
+          },
+          {
+            "image": { "src": "assets/images/cnfs-banner.png", "alt": "Team recruitment" },
+            "category": "Team",
+            "date": "January 5, 2026",
+            "title": "Recruitment Drive: Join CNFS for 2025/2026",
+            "excerpt": "We're recruiting across all departments - from mechanical engineering to business and marketing. If you're a student at Centrale Nantes, there's a place for you."
+          },
+          {
+            "image": { "src": "assets/images/wheels-emrax-228.png", "alt": "Team formation" },
+            "category": "Milestones",
+            "date": "December 15, 2025",
+            "title": "CNFS Founded: Centrale Nantes Enters Formula Student",
+            "excerpt": "Centrale Nantes Formula Student is officially registered as a student association. Our goal: design, build, and race a competition car within our first academic year."
+          }
+        ]
+      }
+    },
+    {
+      "type": "card-grid",
+      "props": {
+        "background": "gray",
+        "cardsCentered": true,
+        "iconLarge": true,
+        "label": "Follow Us",
+        "title": "Social Media",
+        "intro": "Stay connected and follow our daily progress on social media.",
+        "cards": [
+          {
+            "icon": "&#128247;",
+            "title": "Instagram",
+            "text": "Behind-the-scenes photos, workshop updates, and team moments. Follow our journey visually.",
+            "link": { "href": "https://www.instagram.com/cnfsracingteam/", "label": "@cnfsracingteam" }
+          },
+          {
+            "icon": "in",
+            "title": "LinkedIn",
+            "text": "Professional updates, partnership announcements, and team achievements. Connect with us.",
+            "link": { "href": "https://www.linkedin.com/company/centralenantesfs/", "label": "CNFS Racing" }
+          },
+          {
+            "icon": "f",
+            "title": "Facebook",
+            "text": "Event announcements, community updates, and longer-form posts about our progress.",
+            "link": { "label": "CNFS Racing" }
+          }
+        ]
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "threeD": true,
+        "title": "Want to Feature CNFS?",
+        "text": "Press inquiries, interviews, and media collaborations - we'd love to share our story.",
+        "actions": [
+          { "label": "Contact Us", "href": "contact.html", "style": "primary" }
+        ]
+      }
+    }
+  ]
+}
