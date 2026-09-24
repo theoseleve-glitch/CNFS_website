@@ -1,0 +1,30 @@
+{
+  "title": "Page Not Found - CNFS",
+  "meta": {
+    "themeColor": "#1B2141",
+    "robots": "noindex",
+    "faviconFill": "#1B2141"
+  },
+  "head": {
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "stylesheets": ["css/style.css"]
+  },
+  "headerVariant": "minimal",
+  "skipLink": false,
+  "footer": false,
+  "backToTop": false,
+  "mainStyle": "display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;text-align:center;padding:var(--header-height) var(--space-xl) var(--space-xl);",
+  "sections": [
+    {
+      "type": "error-404",
+      "props": {
+        "title": "Page Not Found",
+        "text": "Looks like this page took a wrong turn on the circuit. Let's get you back on track.",
+        "actions": [
+          { "label": "Back to Home", "href": "index.html", "style": "primary" },
+          { "label": "Contact Us", "href": "contact.html", "style": "outline-dark" }
+        ]
+      }
+    }
+  ]
+}

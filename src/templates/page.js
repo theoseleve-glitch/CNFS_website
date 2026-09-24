@@ -1,14 +1,17 @@
 // Page composer: assembles a full page's <body> content (skip link, header,
 // <main> of sections, footer, back-to-top button) and hands it to
-// renderDocument for the surrounding shell. The skip link and back-to-top
-// button appear identically on every page in the source except 404.html
-// (out of scope here — Task 15 revisits it), so they are hardcoded rather
-// than gated behind a page flag; the preloader and grain overlay, which are
-// index.html-only, are instead gated in document.js behind page.preloader.
+// renderDocument for the surrounding shell. The skip link, footer, and
+// back-to-top button appear identically on every page in the source except
+// 404.html, which has none of the three and a structurally different
+// (minimal) header — so each is gated behind an explicit page flag
+// (`skipLink`, `footer`, `backToTop`, default true; `headerVariant`), same
+// pattern as `page.transparentHeader`/`page.magneticCta` below. The
+// preloader and grain overlay, which are index.html-only, are instead gated
+// in document.js behind page.preloader.
 // No Node built-ins: this module is imported by the Cloudflare Workers
 // runtime.
 
-import { each } from './lib/html.js';
+import { each, attr } from './lib/html.js';
 import { renderDocument } from './document.js';
 import { renderHeader } from './globals/header.js';
 import { renderFooter } from './globals/footer.js';
@@ -54,19 +57,32 @@ export function mergeGlobals(globals, override) {
 export function renderPage({ page, globals, theme, mode = 'public' }) {
   const pageGlobals = mergeGlobals(globals, page.globalsOverride);
 
+  const skipLink = page.skipLink === false
+    ? ''
+    : `<a href="#main-content" class="skip-link">Skip to content</a>`;
+
+  const header = renderHeader({
+    globals: pageGlobals,
+    currentPath: page.path,
+    transparent: page.transparentHeader !== false,
+    magneticCta: page.magneticCta === true,
+    minimal: page.headerVariant === 'minimal',
+  });
+
+  const footer = page.footer === false ? '' : renderFooter({ globals: pageGlobals });
+
+  const backToTop = page.backToTop === false
+    ? ''
+    : `<button class="back-to-top" aria-label="Back to top" title="Back to top">&#8593;</button>`;
+
   const body =
-    `<a href="#main-content" class="skip-link">Skip to content</a>` +
-    renderHeader({
-      globals: pageGlobals,
-      currentPath: page.path,
-      transparent: page.transparentHeader !== false,
-      magneticCta: page.magneticCta === true,
-    }) +
-    `<main class="site-main" id="main-content" role="main">` +
+    skipLink +
+    header +
+    `<main class="site-main" id="main-content" role="main"${attr('style', page.mainStyle)}>` +
     each(page.sections, (s) => renderSection(s, { mode })) +
     `</main>` +
-    renderFooter({ globals: pageGlobals }) +
-    `<button class="back-to-top" aria-label="Back to top" title="Back to top">&#8593;</button>`;
+    footer +
+    backToTop;
 
   return renderDocument({ page, globals, theme, body });
 }

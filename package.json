@@ -8,6 +8,7 @@
     "start": "npx serve src -l 3000 -s",
     "build": "node scripts/build.cjs",
     "test": "node --test \"tests/**/*.test.js\"",
+    "test:golden": "node --test tests/golden-all.test.js",
     "lint:css": "npx stylelint src/css/**/*.css --fix",
     "lint:html": "npx htmlhint src/*.html"
   },
