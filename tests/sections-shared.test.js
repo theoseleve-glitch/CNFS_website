@@ -190,3 +190,41 @@ test('org-chart escapes member name and role as text, not live markup', () => {
   assert.ok(!html.includes('<b>x</b>'));
   assert.ok(!html.includes('<i>y</i>'));
 });
+
+// RULING 31: sponsors-section collapsed its two mutually-exclusive header
+// props (`sIntro` / `header`) into one `header` prop with a `style`
+// discriminator, so there is exactly one field a CMS editor (or Phase 4's
+// field-generator) ever needs to reason about.
+test("sponsors-section header.style 's-intro' renders the s-intro header", () => {
+  const html = renderSection({
+    type: 'sponsors-section',
+    props: { header: { style: 's-intro', label: 'L', heading: 'H' }, tiers: [] }
+  });
+  assert.ok(html.includes('class="s-intro"'));
+  assert.ok(!html.includes('class="text-center"'));
+});
+
+test("sponsors-section header.style 'plain' renders the plain header", () => {
+  const html = renderSection({
+    type: 'sponsors-section',
+    props: { header: { style: 'plain', label: 'L', title: 'T' }, tiers: [] }
+  });
+  assert.ok(html.includes('class="text-center"'));
+  assert.ok(!html.includes('class="s-intro"'));
+});
+
+test('sponsors-section renders the default header with no literal undefined when header is absent', () => {
+  const html = renderSection({ type: 'sponsors-section', props: { tiers: [] } });
+  assert.ok(html.includes('class="s-intro"'));
+  assert.ok(!html.includes('undefined'));
+});
+
+test('TOTAL RENDERING: an unknown header style falls back rather than throwing', () => {
+  assert.doesNotThrow(() => {
+    const html = renderSection({
+      type: 'sponsors-section',
+      props: { header: { style: 'nonsense', label: 'L' }, tiers: [] }
+    });
+    assert.equal(typeof html, 'string');
+  });
+});

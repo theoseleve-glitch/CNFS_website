@@ -187,7 +187,8 @@
       "props": {
         "id": "sponsors",
         "background": "gray",
-        "sIntro": {
+        "header": {
+          "style": "s-intro",
           "label": "They Support Us",
           "heading": "Our Sponsors",
           "scroll3d": "fly-in"

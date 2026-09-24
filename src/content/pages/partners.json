@@ -66,6 +66,7 @@
         "id": "current-sponsors",
         "background": "dark",
         "header": {
+          "style": "plain",
           "label": "Current Partners",
           "title": "Our Sponsors",
           "intro": "We are actively building our sponsor portfolio for the 2025/2026 season. Be among the first to support CNFS."
