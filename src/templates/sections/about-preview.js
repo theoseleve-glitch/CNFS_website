@@ -9,8 +9,22 @@
 // controls the visual order). `accent` and `actions` have no about.html
 // precedent (the accent div is always present there, and no about-preview in
 // the source carries a button) — implemented conservatively per the frozen
-// prop shape; see task-7-report.md. No Node built-ins: this module is
-// imported by the Cloudflare Workers runtime.
+// prop shape; see task-7-report.md.
+//
+// Task 12 (partners.html) adds one more optional prop: `list` — the "Why
+// Partner With Us" instance has a `<ul class="about-preview__list">` of
+// checkmark benefits between the lead paragraph and the image column, which
+// no prior about-preview instance has. `list.icon` is a single value shared
+// by every `<li>` (the source repeats the same "&#10003;" glyph five times;
+// storing it once avoids Ruling 4's redundant state — a future instance
+// wanting per-item icons is a genuine markup difference, not this shape).
+// `list.items` follows the same RICH TEXT precedent as `body` below: each
+// item's text carries a genuine `<strong>` lead-in (e.g. "<strong>Brand
+// visibility</strong> on the car, ..."), so items go through raw(), not
+// esc(), for the same reason and under the same sanitise-on-write
+// obligation documented on renderBody(). Omitted entirely when absent, so
+// every pre-existing caller renders byte-identically to before. No Node
+// built-ins: this module is imported by the Cloudflare Workers runtime.
 
 import { esc, attrEsc, raw, cls, each } from '../lib/html.js';
 
@@ -37,11 +51,24 @@ function renderActions(actions) {
   return each(actions, (a) => `<a href="${attrEsc(a.href)}" class="btn btn--${attrEsc(a.style)}">${esc(a.label)}</a>`);
 }
 
+// See the `list` note at the top of this file: a single shared icon plus
+// per-item rich text, same raw() precedent as renderBody() above.
+function renderList(list) {
+  if (!list || !list.items || list.items.length === 0) return '';
+  return `<ul class="about-preview__list">
+      ${each(list.items, (item) => `<li class="about-preview__list-item">
+        <span class="about-preview__list-icon">${raw(list.icon)}</span>
+        <span>${raw(item)}</span>
+      </li>`)}
+    </ul>`;
+}
+
 function renderContent(props) {
   return `<div class="about-preview__content" data-scroll-3d="rotate-left">
       ${props.eyebrow ? `<span class="section-label">${esc(props.eyebrow)}</span>` : ''}
       <h2 class="section-title">${esc(props.title)}</h2>
       ${renderBody(props.body)}
+      ${renderList(props.list)}
       ${renderActions(props.actions)}
     </div>`;
 }

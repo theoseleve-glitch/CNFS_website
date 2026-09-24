@@ -1,0 +1,143 @@
+{
+  "path": "partners.html",
+  "title": "Partners - CNFS",
+  "meta": {
+    "description": "Partner with CNFS - Sponsorship packages, benefits, and how to support Centrale Nantes Formula Student.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "Partners - CNFS",
+    "ogDescription": "Support CNFS - sponsorship packages from 500EUR. Invest in the future of engineering.",
+    "ogImage": "assets/images/partnership-handshake.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "Partners" }
+        ],
+        "title": "Become a Partner"
+      }
+    },
+    {
+      "type": "about-preview",
+      "props": {
+        "eyebrow": "Why Partner With Us",
+        "title": "Invest in the Future of Engineering",
+        "body": [
+          "By partnering with CNFS, you support hands-on engineering education while gaining visibility among 20 future engineers and the wider Centrale Nantes community."
+        ],
+        "list": {
+          "icon": "&#10003;",
+          "items": [
+            "<strong>Brand visibility</strong> on the car, team uniforms, website, and social media",
+            "<strong>Recruitment access</strong> to top engineering talent from Centrale Nantes",
+            "<strong>Event presence</strong> at Formula Student competitions across Europe",
+            "<strong>CSR value</strong> - support STEM education and student initiatives",
+            "<strong>Technical collaboration</strong> - test your products in a real engineering environment"
+          ]
+        },
+        "image": "assets/images/partnership-handshake.jpg",
+        "imageAlt": "Partnership and collaboration",
+        "accent": true
+      }
+    },
+    {
+      "type": "sponsors-section",
+      "props": {
+        "id": "current-sponsors",
+        "background": "dark",
+        "header": {
+          "label": "Current Partners",
+          "title": "Our Sponsors",
+          "intro": "We are actively building our sponsor portfolio for the 2025/2026 season. Be among the first to support CNFS."
+        },
+        "tiers": [
+          {
+            "label": "Gold Partners",
+            "scroll3d": "tilt-up",
+            "threeD": true,
+            "placeholderIcon": "&#9733;",
+            "slots": [
+              { "text": "Be Our First Gold Partner" },
+              null
+            ]
+          },
+          {
+            "label": "Silver &amp; Bronze Partners",
+            "scroll3d": "tilt-up",
+            "threeD": true,
+            "placeholderIcon": "+",
+            "slots": [null, null, null, null]
+          }
+        ]
+      }
+    },
+    {
+      "type": "content-card-split",
+      "props": {
+        "left": {
+          "label": "Beyond Financial Support",
+          "title": "In-Kind Partnerships",
+          "body": [
+            "We also welcome partnerships through donations of materials, components, software licenses, tools, and technical expertise.",
+            "In-kind sponsors receive equivalent visibility and benefits based on the value of their contribution. This is an excellent way for companies to showcase their products in a real engineering context while supporting student innovation."
+          ]
+        },
+        "right": {
+          "cards": [
+            { "title": "Materials", "text": "Steel, aluminium, composites, fasteners, raw materials for chassis and bodywork." },
+            { "title": "Software", "text": "CAD, FEA, CFD, data acquisition, and ECU tuning software licenses." },
+            { "title": "Components", "text": "Engine parts, brakes, bearings, electronics, sensors, tyres, and wheels." },
+            { "title": "Expertise", "text": "Technical mentorship, workshop access, manufacturing support, and training." }
+          ]
+        }
+      }
+    },
+    {
+      "type": "specs-grid",
+      "props": {
+        "label": "Your Brand's Reach",
+        "title": "Where Your Logo Appears",
+        "background": "dark",
+        "specs": [
+          { "value": "&#128663;", "label": "On the Car" },
+          { "value": "&#128085;", "label": "Team Uniforms" },
+          { "value": "&#127760;", "label": "Website & Social" },
+          { "value": "&#128240;", "label": "Flyers & Print" },
+          { "value": "&#127941;", "label": "Competition Events" },
+          { "value": "&#127916;", "label": "Video Content" }
+        ]
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "title": "Let's Build Something Together",
+        "text": "Whether financial or in-kind, every partnership helps us bring our car to the starting grid. Contact us to discuss a tailored partnership.",
+        "threeD": true,
+        "actions": [
+          { "label": "Contact Our Partnership Team", "href": "contact.html", "style": "primary" }
+        ]
+      }
+    }
+  ]
+}

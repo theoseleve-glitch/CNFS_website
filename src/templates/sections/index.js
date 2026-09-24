@@ -18,6 +18,7 @@ import { renderAboutPreview } from './about-preview.js';
 import { renderCarPinned } from './car-pinned.js';
 import { renderCardGrid } from './card-grid.js';
 import { renderCardsSection } from './cards-section.js';
+import { renderContentCardSplit } from './content-card-split.js';
 import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
 import { renderDeptGrid } from './dept-grid.js';
@@ -42,6 +43,7 @@ export const SECTIONS = {
   'car-pinned': renderCarPinned,
   'card-grid': renderCardGrid,
   'cards-section': renderCardsSection,
+  'content-card-split': renderContentCardSplit,
   'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
   'dept-grid': renderDeptGrid,

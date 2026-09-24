@@ -10,14 +10,31 @@
 // `props.label` is plain esc(): the Silver/Bronze tier's label is properly
 // escaped in source as `Silver &amp; Bronze Partners`, and RULING 24's
 // entity-aware esc() reproduces that unchanged (it's already a complete,
-// valid named reference) — no raw() exemption needed. No Node built-ins:
-// imported by the Cloudflare Workers runtime.
+// valid named reference) — no raw() exemption needed.
+//
+// Task 12 (partners.html) adds one optional prop: `threeD`. src/index.html's
+// two tiers render `<div class="sponsor-grid">`; src/partners.html's two
+// tiers render `<div class="sponsor-grid sponsors-3d">` — same structure,
+// same per-slot markup, only this one modifier class differs, so it is
+// data-driven the same way card-grid/specs-grid's `background` prop is
+// (Ruling 15), rather than hardcoded or forked. Omitted (falsy), it renders
+// byte-identically to every pre-existing caller.
+//
+// Task 12 also adds an optional per-slot `text` override: every placeholder
+// slot on every source page reads "Your Logo Here" EXCEPT the first Gold
+// slot on src/partners.html, which reads "Be Our First Gold Partner". A
+// placeholder slot is still identified by the absence of `href` (real
+// sponsors always have one), so `null`/`undefined` keep defaulting to "Your
+// Logo Here" exactly as before; only a slot object with no `href` but a
+// `text` field overrides the wording, still through esc(). No Node
+// built-ins: imported by the Cloudflare Workers runtime.
 
-import { esc, attrEsc, raw, attr, each } from '../lib/html.js';
+import { esc, attrEsc, raw, cls, attr, each } from '../lib/html.js';
 
 function renderSlot(slot, placeholderIcon) {
-  if (!slot) {
-    return `<a href="#" role="link" aria-disabled="true" class="sponsor-slot"><div class="sponsor-slot__placeholder"><div class="sponsor-slot__placeholder-icon">${raw(placeholderIcon)}</div><div class="sponsor-slot__placeholder-text">Your Logo Here</div></div></a>`;
+  if (!slot || !slot.href) {
+    const text = (slot && slot.text) || 'Your Logo Here';
+    return `<a href="#" role="link" aria-disabled="true" class="sponsor-slot"><div class="sponsor-slot__placeholder"><div class="sponsor-slot__placeholder-icon">${raw(placeholderIcon)}</div><div class="sponsor-slot__placeholder-text">${esc(text)}</div></div></a>`;
   }
   return `<a href="${attrEsc(slot.href)}" class="sponsor-slot"><img src="${attrEsc(slot.logo)}" alt="${attrEsc(slot.name)}"></a>`;
 }
@@ -26,7 +43,7 @@ export function renderSponsorGrid(props) {
   const slots = props.slots || [];
   return `<div class="sponsor-tier"${attr('data-scroll-3d', props.scroll3d)}>
       <div class="sponsor-tier__label">${esc(props.label)}</div>
-      <div class="sponsor-grid">
+      <div class="${cls('sponsor-grid', props.threeD && 'sponsors-3d')}">
         ${each(slots, (s) => renderSlot(s, props.placeholderIcon))}
       </div>
     </div>`;
