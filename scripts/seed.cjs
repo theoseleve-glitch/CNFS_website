@@ -55,8 +55,13 @@ function userSql(email) {
   const hash = crypto.pbkdf2Sync(password, salt, ITERATIONS, 32, 'sha256');
   const now = new Date().toISOString();
 
+  // Owner-only permissions. Default mode would be world-readable on a POSIX
+  // box, and this file holds a working admin password in plaintext. Windows
+  // largely ignores POSIX modes, but the repo is not Windows-only and the cost
+  // of being explicit is nil.
+  const credPath = path.join(ROOT, '.admin-credentials.txt');
   fs.writeFileSync(
-    path.join(ROOT, '.admin-credentials.txt'),
+    credPath,
     [
       'CNFS admin credentials',
       '======================',
@@ -70,8 +75,15 @@ function userSql(email) {
       'the password is stored in your password manager.',
       ''
     ].join('\n'),
-    'utf8'
+    { encoding: 'utf8', mode: 0o600, flag: 'w' }
   );
+  // Belt and braces: `mode` only applies when the file is CREATED, so an
+  // existing file from an earlier run would keep its old permissions.
+  try {
+    fs.chmodSync(credPath, 0o600);
+  } catch {
+    // Windows: POSIX modes are not meaningfully enforced. Not fatal.
+  }
 
   return [
     `-- User ${email}. Password hash only; the plaintext is in .admin-credentials.txt (gitignored).`,
