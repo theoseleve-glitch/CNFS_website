@@ -12,17 +12,24 @@
 // Task 11 (formula-student.html) adds two more optional props, both
 // backwards-compatible (omitted = prior behaviour, byte-identical):
 //
-// `brokenHeader`: src/events.html's "Partner & Public Events" instance and
-// src/formula-student.html's "Competition Calendar" instance both open their
-// header with `<div " data-scroll-3d="tilt-up">` — a stray `"` immediately
-// after `<div`, no class attribute, a plain (non-`--center`) title, and (on
-// events.html) a plain `.lead` intro instead of `.lead.lead--centered`. This
-// is the same "typo in the immutable source" pattern already reproduced
-// verbatim in timeline-roadmap.js's rotate-left/rotate-right columns, just
-// with a different data-scroll-3d value here. `brokenHeader` carries that
+// `_brokenHeader` (underscore-prefixed — see the internal-prop convention
+// documented atop ./index.js): src/events.html's "Partner & Public Events"
+// instance and src/formula-student.html's "Competition Calendar" instance
+// both open their header with `<div " data-scroll-3d="tilt-up">` — a stray
+// `"` immediately after `<div`, no class attribute, a plain (non-`--center`)
+// title, and (on events.html) a plain `.lead` intro instead of
+// `.lead.lead--centered`. This is the same "typo in the immutable source"
+// pattern reproduced verbatim (hardcoded, no prop) in timeline-roadmap.js's
+// rotate-left/rotate-right columns, just with a different data-scroll-3d
+// value here, and variable enough (multiple values across pages) that it
+// needs to be a prop rather than hardcoded. `_brokenHeader` carries that
 // value directly (e.g. `'tilt-up'`) rather than a separate boolean + value
 // pair (Ruling 4: no redundant state) — its mere presence toggles the broken
-// wrapper markup, its string value fills in the attribute.
+// wrapper markup, its string value fills in the attribute. RULING 28: the
+// value still goes through attrEsc() like every other attribute — being
+// dev-authored today is not a reason to skip it; Phase 4 may feed it from a
+// field a non-developer never sees (which is exactly why it is underscore-
+// prefixed and excluded from the editor).
 //
 // `subtitle` (per card): src/formula-student.html's Static Events cards have
 // a second line inside the `<h3>` — e.g. `Engineering Design<br><small
@@ -34,16 +41,16 @@
 //
 // No Node built-ins: imported by the Cloudflare Workers runtime.
 
-import { esc, raw, cls, each } from '../lib/html.js';
+import { esc, attrEsc, raw, cls, each } from '../lib/html.js';
 
 export function renderCardGrid(props, ctx) {
   const cards = props.cards || [];
   const columns = props.columns || 3;
-  const broken = props.brokenHeader;
+  const broken = props._brokenHeader;
 
   const header = (props.label || props.title || props.intro)
     ? broken
-      ? `<div " data-scroll-3d="${broken}">
+      ? `<div " data-scroll-3d="${attrEsc(broken)}">
       ${props.label ? `<span class="section-label">${esc(props.label)}</span>` : ''}
       ${props.title ? `<h2 class="section-title">${esc(props.title)}</h2>` : ''}
       ${props.intro ? `<p class="lead">${esc(props.intro)}</p>` : ''}

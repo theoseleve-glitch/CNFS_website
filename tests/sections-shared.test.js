@@ -150,6 +150,27 @@ test('org-chart derives team-member--president from position: only the first mem
   assert.equal(html.match(/team-member--president/g).length, 1);
 });
 
+test('SECURITY: internal compat props are attribute-escaped like any other value', () => {
+  const html = renderSection({
+    type: 'card-grid',
+    props: { title: 'T', _brokenHeader: 'tilt-up" onmouseover="alert(1)', cards: [] }
+  });
+
+  // A naive `includes('onmouseover')` would false-positive: the correctly
+  // escaped form legitimately contains the handler name inside the (now
+  // inert) attribute VALUE — e.g. data-scroll-3d="tilt-up&quot;
+  // onmouseover=&quot;alert(1)&quot;". Strip text nodes out (keep tag
+  // markup only), then require there be no RAW `"` sitting directly before
+  // "onmouseover": that exact adjacency (`" onmouseover=`) only occurs when
+  // the payload closed the real attribute early and "onmouseover" became a
+  // second, live attribute on the tag. When attrEsc() has done its job, the
+  // character immediately before "onmouseover" is the `;` of `&quot;`, not
+  // a bare `"`, so this never matches.
+  const tagsOnly = html.match(/<[^>]*>/g).join('\n');
+  assert.ok(!/"\s+onmouseover\s*=/.test(tagsOnly), 'a raw quote must never sit directly before onmouseover=');
+  assert.ok(html.includes('&quot;'), 'the injected quote must have been escaped to &quot;');
+});
+
 test('org-chart escapes member name and role as text, not live markup', () => {
   const html = renderSection({
     type: 'org-chart',

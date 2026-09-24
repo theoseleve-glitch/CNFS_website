@@ -16,10 +16,15 @@
 // Each source column's opening tag is `<div " data-scroll-3d="...">` — a
 // stray `"` immediately after `<div`, with no class attribute before it (a
 // typo in the immutable source, evidently a leftover from a removed class
-// attribute). It is reproduced verbatim, hardcoded per column, because it
-// is template markup, not meaningful content a CMS editor should ever
-// author. No Node built-ins: this module is imported by the Cloudflare
-// Workers runtime.
+// attribute). It is reproduced verbatim, hardcoded per column — not exposed
+// as a prop at all, let alone an underscore-prefixed one (see the
+// internal-prop convention documented atop ./index.js): both this section's
+// occurrences always use the same fixed `rotate-left`/`rotate-right` pair,
+// so there is nothing here that varies and would need a field to carry it.
+// card-grid's `_brokenHeader` is the data-driven sibling of this same
+// bug-compat pattern, for instances where the value genuinely varies
+// (`tilt-up` on formula-student.html/events.html). No Node built-ins: this
+// module is imported by the Cloudflare Workers runtime.
 
 import { esc, cls, each } from '../lib/html.js';
 import { renderTimeline } from './timeline.js';

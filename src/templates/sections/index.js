@@ -1,5 +1,17 @@
 // Section registry. No Node built-ins: this module is imported by the
 // Cloudflare Workers runtime.
+//
+// RULING 29 — internal-prop convention: a prop name prefixed with `_` (e.g.
+// card-grid's `_brokenHeader`) is internal bug-compatibility or structural
+// plumbing, not content. It exists only to reproduce a quirk — typically a
+// typo — in the original static HTML, and must never surface to a
+// non-developer as an editable field. Phase 4's field-definition generator
+// MUST skip every underscore-prefixed prop when building an editor form.
+// These props are expected to be deleted the day the underlying HTML quirk
+// they compensate for is fixed — they are not permanent API surface, and
+// every value that reaches one is still escaped exactly like ordinary
+// content (Ruling 28) since "internal" describes who edits it, not how
+// trusted its value is.
 
 import { renderAboutParallax } from './about-parallax.js';
 import { renderAboutPreview } from './about-preview.js';

@@ -115,7 +115,7 @@
       "props": {
         "label": "Where We Compete",
         "title": "Competition Calendar",
-        "brokenHeader": "tilt-up",
+        "_brokenHeader": "tilt-up",
         "cards": [
           {
             "icon": "&#127467;&#127479;",
