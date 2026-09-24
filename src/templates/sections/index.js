@@ -22,6 +22,7 @@ import { renderContentCardSplit } from './content-card-split.js';
 import { renderCtaBanner } from './cta-banner.js';
 import { renderCtaSection } from './cta-section.js';
 import { renderDeptGrid } from './dept-grid.js';
+import { renderEventsList } from './events-list.js';
 import { renderFsEvents } from './fs-events.js';
 import { renderHeroAw } from './hero-aw.js';
 import { renderMarquee } from './marquee.js';
@@ -47,6 +48,7 @@ export const SECTIONS = {
   'cta-banner': renderCtaBanner,
   'cta-section': renderCtaSection,
   'dept-grid': renderDeptGrid,
+  'events-list': renderEventsList,
   'fs-events': renderFsEvents,
   'hero-aw': renderHeroAw,
   'marquee': renderMarquee,

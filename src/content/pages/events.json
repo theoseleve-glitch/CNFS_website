@@ -1,0 +1,165 @@
+{
+  "path": "events.html",
+  "title": "Events - CNFS",
+  "meta": {
+    "description": "CNFS events calendar - Formula Student competitions, team milestones, and upcoming activities.",
+    "themeColor": "#0A0C10",
+    "faviconFill": "#1B2141",
+    "ogTitle": "Events - CNFS",
+    "ogDescription": "CNFS events calendar - competitions, milestones, and upcoming activities.",
+    "ogImage": "assets/images/event-formula-student-france.jpg",
+    "ogSiteName": "CNFS - Centrale Nantes Formula Student"
+  },
+  "head": {
+    "hreflang": [
+      { "lang": "en", "href": "" },
+      { "lang": "x-default", "href": "" }
+    ],
+    "stylesheets": ["css/style.css", "css/awwwards.css"],
+    "fontHref": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
+    "noscript": true
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "js/main.js",
+    "js/gsap-engine.js"
+  ],
+  "sections": [
+    {
+      "type": "page-header",
+      "props": {
+        "breadcrumb": [
+          { "label": "Home", "href": "index.html" },
+          { "label": "Events" }
+        ],
+        "title": "Events"
+      }
+    },
+    {
+      "type": "events-list",
+      "props": {
+        "_brokenHeader": "tilt-up",
+        "label": "Competitions",
+        "title": "Race Calendar 2027",
+        "intro": "Our target competitions for the 2025/2026 season.",
+        "events": [
+          {
+            "date": { "month": "Jul", "day": "10", "year": "2027" },
+            "badge": { "type": "competition", "label": "Competition" },
+            "title": "Formula Student France (Transpolis)",
+            "location": "France",
+            "text": "Our primary target for the inaugural season. Teams from across Europe compete in static and dynamic events over 4 days. This is where CNFS makes its debut."
+          },
+          {
+            "date": { "month": "Aug", "day": "05", "year": "2028" },
+            "badge": { "type": "competition", "label": "Future Goal" },
+            "title": "Formula Student Germany",
+            "location": "Hockenheimring, Germany",
+            "text": "The largest and most prestigious Formula Student event in the world. Over 100 teams compete at the legendary Hockenheimring. A goal for our second or third season."
+          },
+          {
+            "date": { "month": "Jul", "day": "15", "year": "2028" },
+            "badge": { "type": "competition", "label": "Future Goal" },
+            "title": "Formula Student UK",
+            "location": "Silverstone, United Kingdom",
+            "text": "One of the oldest and most respected FS events, held at the home of British motorsport. An aspirational target as we grow."
+          }
+        ]
+      }
+    },
+    {
+      "type": "events-list",
+      "props": {
+        "background": "gray",
+        "_brokenHeader": "tilt-up",
+        "label": "Season 2025/2026",
+        "title": "Team Milestones",
+        "intro": "Key dates in our journey from concept to competition.",
+        "events": [
+          {
+            "date": { "month": "Sep", "day": "15", "year": "2026" },
+            "badge": { "type": "team", "label": "Team" },
+            "title": "Season Kickoff &amp; Recruitment",
+            "location": "Centrale Nantes Campus",
+            "text": "Official launch of the 2025/2026 season. Open recruitment across all departments — mechanical, electrical, software, business, and marketing."
+          },
+          {
+            "date": { "month": "Nov", "day": "20", "year": "2026" },
+            "badge": { "type": "milestone", "label": "Milestone" },
+            "title": "Concept Design Review",
+            "location": "Engineering Building, Centrale Nantes",
+            "text": "All departments present their initial concepts. The team selects the final design direction for chassis, powertrain, suspension, and aerodynamics."
+          },
+          {
+            "date": { "month": "Jan", "day": "15", "year": "2027" },
+            "badge": { "type": "milestone", "label": "Milestone" },
+            "title": "Critical Design Review",
+            "location": "Centrale Nantes",
+            "text": "Final design freeze. All CAD models, FEA simulations, and manufacturing plans are reviewed and approved. Production-ready drawings are released."
+          },
+          {
+            "date": { "month": "Feb", "day": "01", "year": "2027" },
+            "badge": { "type": "milestone", "label": "Milestone" },
+            "title": "Manufacturing Begins",
+            "location": "University Workshops",
+            "text": "Chassis welding, component machining, composite layup, and electronics assembly begin in Centrale Nantes workshops."
+          },
+          {
+            "date": { "month": "Apr", "day": "15", "year": "2027" },
+            "badge": { "type": "team", "label": "Team" },
+            "title": "Rollout &amp; Shakedown",
+            "location": "Centrale Nantes",
+            "text": "The car hits the ground for the first time. Systems integration, first fire-up, and initial shakedown testing. A landmark moment for the team."
+          },
+          {
+            "date": { "month": "May", "day": "01", "year": "2027" },
+            "badge": { "type": "team", "label": "Team" },
+            "title": "Testing &amp; Driver Training",
+            "location": "Regional Circuit, Nantes Area",
+            "text": "Intensive testing programme: suspension tuning, engine mapping, brake balance, and driver training sessions ahead of competition."
+          }
+        ]
+      }
+    },
+    {
+      "type": "card-grid",
+      "props": {
+        "_brokenHeader": "tilt-up",
+        "label": "Community",
+        "title": "Partner &amp; Public Events",
+        "intro": "Opportunities to meet the team, see the car, and connect with CNFS.",
+        "cards": [
+          {
+            "icon": "&#127915;",
+            "title": "Car Reveal Day",
+            "text": "A public unveiling of the finished car for sponsors, university staff, and media. Includes technical presentations and networking."
+          },
+          {
+            "icon": "&#127979;",
+            "title": "Open Workshop Days",
+            "text": "Monthly open-door sessions where sponsors and prospective members can visit the workshop, meet the team, and see progress first-hand."
+          },
+          {
+            "icon": "&#127942;",
+            "title": "End-of-Season Gala",
+            "text": "Annual celebration for the team and partners. Presentation of results, recognition of sponsors, and planning for the next season."
+          }
+        ]
+      }
+    },
+    {
+      "type": "cta-section",
+      "props": {
+        "threeD": true,
+        "title": "Want to Attend an Event?",
+        "text": "Contact us for invitations to car reveal, open workshops, and competition VIP access.",
+        "actions": [
+          { "label": "Contact Us", "href": "contact.html", "style": "primary" },
+          { "label": "Partner Benefits", "href": "partners.html", "style": "outline" }
+        ]
+      }
+    }
+  ]
+}
