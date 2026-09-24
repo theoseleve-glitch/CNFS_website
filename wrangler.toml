@@ -1,0 +1,17 @@
+name = "cnfs-website"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "dist"
+
+# Content + version history + user accounts.
+[[d1_databases]]
+binding = "DB"
+database_name = "cnfs-content"
+database_id = "9ac65e8b-75af-4f94-bc80-5c12fec65a3b"
+
+# Uploaded images, content-addressed.
+[[kv_namespaces]]
+binding = "IMAGES"
+id = "1112d12f48804dbfa53534ed9cf42e1a"
+
+# SESSION_SECRET is set with `wrangler pages secret put SESSION_SECRET`.
+# It is never committed.

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>CNFS Admin</title>
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin">
+
+<header class="topbar">
+  <div class="topbar__brand">CNFS<span>admin</span></div>
+
+  <label class="topbar__page">
+    <span class="sr-only">Page</span>
+    <select id="page-select"></select>
+  </label>
+
+  <div class="topbar__actions">
+    <span class="status" id="status" aria-live="polite"></span>
+    <button class="btn" id="btn-history" type="button">History</button>
+    <button class="btn btn--primary" id="btn-save" type="button" disabled>Save &amp; publish</button>
+    <button class="btn btn--ghost" id="btn-logout" type="button">Sign out</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- Left: what you are editing -->
+  <section class="panel panel--edit" aria-label="Content">
+    <nav class="tabs" role="tablist">
+      <button class="tab is-active" data-tab="content" role="tab">Content</button>
+      <button class="tab" data-tab="design" role="tab">Design</button>
+      <button class="tab" data-tab="pages" role="tab">Pages</button>
+    </nav>
+
+    <div class="tabpanel is-active" id="tab-content">
+      <div class="sections" id="section-list"></div>
+      <div class="editor" id="editor"></div>
+    </div>
+
+    <div class="tabpanel" id="tab-design">
+      <div class="design" id="design-panel"></div>
+    </div>
+
+    <div class="tabpanel" id="tab-pages">
+      <div class="pages" id="pages-panel"></div>
+    </div>
+  </section>
+
+  <!-- Right: the real page -->
+  <section class="panel panel--preview" aria-label="Preview">
+    <div class="preview__bar">
+      <span class="preview__url" id="preview-url"></span>
+      <button class="btn btn--ghost btn--sm" id="btn-refresh" type="button">Refresh</button>
+    </div>
+    <iframe class="preview__frame" id="preview" title="Live preview"></iframe>
+  </section>
+</main>
+
+<div class="drawer" id="history-drawer" hidden>
+  <div class="drawer__head">
+    <h2>History</h2>
+    <button class="btn btn--ghost btn--sm" id="btn-close-history" type="button">Close</button>
+  </div>
+  <p class="drawer__hint">Every save is snapshotted. Restoring is itself a save, so it can be undone too.</p>
+  <ul class="versions" id="version-list"></ul>
+</div>
+
+<script src="/admin/admin.js" type="module"></script>
+</body>
+</html>

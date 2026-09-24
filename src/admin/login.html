@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Sign in — CNFS Admin</title>
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="auth">
+  <form class="auth__card" id="login-form" autocomplete="on">
+    <div class="auth__brand">CNFS</div>
+    <h1 class="auth__title">Site admin</h1>
+    <p class="auth__hint">Sign in to edit cnfs.racing.</p>
+
+    <label class="field">
+      <span class="field__label">Email</span>
+      <input class="field__input" type="email" name="email" id="email" required autocomplete="username">
+    </label>
+
+    <label class="field">
+      <span class="field__label">Password</span>
+      <input class="field__input" type="password" name="password" id="password" required autocomplete="current-password">
+    </label>
+
+    <button class="btn btn--primary btn--block" type="submit" id="submit">Sign in</button>
+    <p class="auth__error" id="error" role="alert" hidden></p>
+  </form>
+
+<script>
+const form = document.getElementById('login-form');
+const errorEl = document.getElementById('error');
+const submit = document.getElementById('submit');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorEl.hidden = true;
+  submit.disabled = true;
+  submit.textContent = 'Signing in…';
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CNFS-Admin': '1' },
+      body: JSON.stringify({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) { window.location.href = '/admin/'; return; }
+    errorEl.textContent = data.error || 'Sign in failed';
+    errorEl.hidden = false;
+  } catch {
+    errorEl.textContent = 'Network error. Check your connection and try again.';
+    errorEl.hidden = false;
+  }
+  submit.disabled = false;
+  submit.textContent = 'Sign in';
+});
+</script>
+</body>
+</html>

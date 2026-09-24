@@ -85,4 +85,33 @@ if (fs.existsSync(jsDir)) {
   }
 }
 
+// Page HTML is no longer published as static files: pages are rendered at the
+// edge from the content database so a save in the admin is live immediately.
+// A static dist/about.html would be served BEFORE the renderer Function and
+// would silently freeze the site at deploy time — hence removing them here.
+//
+// The content and templates are bundled into the Function at build time, so
+// they do not need publishing either; shipping them would expose the site's
+// source for no benefit.
+const REMOVE_TOP_LEVEL_HTML = true;
+
+if (REMOVE_TOP_LEVEL_HTML) {
+  let removed = 0;
+  for (const entry of fs.readdirSync(DIST, { withFileTypes: true })) {
+    if (entry.isFile() && entry.name.endsWith('.html')) {
+      fs.rmSync(path.join(DIST, entry.name));
+      removed++;
+    }
+  }
+  console.log(`  Pages: removed ${removed} static .html (rendered at the edge instead)`);
+}
+
+for (const dir of ['templates', 'content']) {
+  const p = path.join(DIST, dir);
+  if (fs.existsSync(p)) {
+    fs.rmSync(p, { recursive: true });
+    console.log(`  Pruned: dist/${dir}/ (bundled into the Function, not published)`);
+  }
+}
+
 console.log('\nBuild complete → dist/');

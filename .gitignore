@@ -21,3 +21,8 @@ desktop.ini
 
 # Cloudflare Wrangler local cache
 .wrangler/
+
+# CMS generated artefacts (contain secrets or are rebuilt)
+.admin-credentials.txt
+migrations/seed.generated.sql
+.superpowers/
